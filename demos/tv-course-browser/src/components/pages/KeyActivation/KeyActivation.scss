@@ -1,0 +1,57 @@
+.key-activation {
+	min-height: 92vh;
+	min-width: 100vw;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	position: relative;
+
+	&__content {
+		display: flex;
+		flex-direction: column;
+		align-items: center;
+		min-width: 39.1vw;
+		max-width: 58.1vw;
+	}
+
+	&__title {
+		color: var(--white);
+		font-size: 2.5vw;
+		font-weight: 800;
+		line-height: 1.25;
+		text-align: center;
+		margin: 0 0 0.83vw;
+		text-transform: uppercase;
+	}
+
+	&__text {
+		color: var(--white);
+		font-size: 1.35vw;
+		font-weight: 400;
+		line-height: 1.25;
+		text-align: center;
+		margin: 0 0 2.6vw;
+		max-width: 50%;
+	}
+}
+
+.tizen-tv .key-activation form {
+	transform: translateY(-2vw);
+	transition: all 1s ease-in-out;
+}
+
+.keyboard-open .key-activation form {
+	transform: translateY(2vw);//was3
+	transition: all 1s ease-in-out;
+}
+
+.lg-tv .key-activation form {
+	margin-bottom: 15vw;
+	transition: all 0.5s ease-in-out;
+}
+
+.key-success {
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+}

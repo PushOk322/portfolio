@@ -1,0 +1,39 @@
+.canvas-wrapper {
+    position: relative;
+    overflow: hidden;
+    background: #000;
+}
+
+canvas {
+    width: 1000px;
+    height: 1000px;
+    pointer-events: all;
+}
+
+.chart-controls {
+    position: fixed;
+    bottom: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    display: flex;
+    gap: 10px;
+    z-index: 10;
+}
+
+.chart-controls button {
+    padding: 8px 16px;
+    border: none;
+    border-radius: 4px;
+    color: white;
+    font-weight: bold;
+    cursor: pointer;
+    transition: opacity 0.3s ease;
+}
+
+.chart-controls button.active {
+    opacity: 1;
+}
+
+.chart-controls button.inactive {
+    opacity: 0.5;
+}

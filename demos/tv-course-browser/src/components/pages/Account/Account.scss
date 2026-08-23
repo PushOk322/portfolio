@@ -1,0 +1,141 @@
+@keyframes account {
+	from {
+		opacity: 0;
+	}
+	to {
+		opacity: 1;
+	}
+}
+.account {
+	width: 100%;
+	min-height: 92vh;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	animation: account 1s ease-in-out;
+}
+
+.account-settings {
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	justify-content: center;
+	min-width: 62.9vw;
+	max-width: 62.9vw;
+	//aspect-ratio: 16 / 9;
+
+	&__support {
+		position: absolute;
+		left: 50%;
+		bottom: 1.16vw;
+		transform: translate(-50%, -50%);
+		display: flex;
+		flex-direction: column;
+		align-items: center;
+	}
+
+	&__support-email {
+		color: var(--white);
+		font-size: 1.46vw;
+		font-weight: 500;
+		line-height: 1.1;
+		margin: 0 0 0.31vw;
+	}
+
+	&__support-description {
+		color: var(--middle-grey);
+		font-size: 1.14vw;
+		font-weight: 500;
+		line-height: 1.1;
+	}
+}
+
+.keyboard-open .account-settings {
+	&__support {
+		display: none;
+	}
+}
+
+.account-settings {
+	&__title {
+		color: var(--white);
+		font-size: 4.48vw;
+		font-weight: 800;
+		line-height: 1.1;
+		max-width: 46.6vw;
+		text-align: center;
+	}
+
+	&__margin {
+		margin-bottom: 2.34vw;
+	}
+
+	&__tabs-container {
+		width: 100%;
+		display: grid;
+		grid-template-columns: repeat(4, 1fr);
+		margin-bottom: auto;
+	}
+}
+
+.account-settings-tab {
+	max-width: 100%;
+	border-radius: 20px;
+	background: var(--dark-grey);
+	min-height: 14.8vw;
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	justify-content: flex-start;
+	padding: 1.98vw 0.83vw;
+	transition: all 0.2s ease-in-out;
+
+	&.focused {
+		background: var(--darker-green);
+	}
+
+	&.disabled {
+		opacity: 0.3;
+	}
+
+	&__text {
+		color: var(--white);
+		font-size: 1.98vw;
+		font-weight: 600;
+		line-height: 1.1;
+		text-align: center;
+
+		&.focused {
+			color: var(--black);
+		}
+	}
+}
+
+.account-settings-tab:not(:last-of-type) {
+	margin-right: 1.25vw;
+}
+
+.tab-icon {
+	min-width: 5.2vw;
+	min-height: 5.2vw;
+	border-radius: 100%;
+	background: var(--middle-grey);
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	margin: 0 0 1.25vw;
+
+	&.focused {
+		background: var(--white);
+
+		&__image {
+			filter: brightness(1) invert(0);
+		}
+	}
+
+	&__image {
+		width: 2.6vw;
+		height: 2.6vw;
+		fill: black;
+	}
+}

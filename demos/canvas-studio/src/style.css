@@ -1,0 +1,88 @@
+.image__wrapper {
+	margin-top: 500px;
+	border: 1px solid blue;
+	perspective: 1000px;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	transition: ease-out;
+}
+
+.image {
+	width: 500px;
+	height: 500px;
+}
+
+.floating {
+	top: 50px;
+	/* An explicit left. With none, the absolute box fell at its static position inside
+	   a flex row — about 1421px in — so the decorative image sat off the right edge and
+	   dragged 200px of horizontal overflow onto the page. */
+	left: 60px;
+	transform: rotate(30deg);
+	position: absolute;
+}
+
+.button {
+	margin-top: 50px;
+	display: flex;
+	justify-content: flex-end;
+	align-items: center;
+	gap: 10px;
+	position: relative;
+	width: 200px;
+}
+
+.line {
+	position: absolute;
+	bottom: 0;
+	width: 150px;
+	height: 1px;
+	background-color: #fff;
+	transform-origin: right center;
+}
+
+.outer-circle {
+	position: relative;
+	width: 48px;
+	height: 48px;
+}
+
+.ring {
+	position: absolute;
+	top: 0;
+	left: 0;
+	width: 100%;
+	height: 100%;
+	transform: rotate(90deg);
+	pointer-events: none;
+}
+
+.ring circle {
+	fill: none;
+	stroke: white;
+	stroke-width: 2;
+	stroke-dasharray: 301.6;
+	stroke-dashoffset: -301.6;
+}
+
+.circle {
+	position: relative;
+	top: 3px;
+	left: 4px;
+	width: 38px;
+	height: 38px;
+	background: linear-gradient(180deg, #ce9ffc 0%, #a582f7 50.52%, #7367f0 100%);
+	color: black;
+	border: 2px solid #333;
+	border-radius: 50%;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+}
+
+.number {
+	font-size: 18px;
+	z-index: 2;
+	position: relative;
+}

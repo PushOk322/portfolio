@@ -1,0 +1,19 @@
+/* Self-hosted Exo 2.
+   The original linked fonts.googleapis.com, which meant every visitor's IP reached
+   Google before first paint. Subset: latin, 400 + 600 — the weights the app uses. */
+
+@font-face {
+	font-family: 'Exo 2';
+	font-style: normal;
+	font-weight: 400;
+	font-display: swap;
+	src: url('/exo-2-latin-400-normal.woff2') format('woff2');
+}
+
+@font-face {
+	font-family: 'Exo 2';
+	font-style: normal;
+	font-weight: 600;
+	font-display: swap;
+	src: url('/exo-2-latin-600-normal.woff2') format('woff2');
+}

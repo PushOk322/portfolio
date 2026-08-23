@@ -1,0 +1,12 @@
+@import '@media';
+
+.container {
+	width: 100%;
+	margin: 0 auto;
+	padding: 0 2vw;
+
+	&.fullscreen {
+		max-width: 100%;
+		padding: 0;
+	}
+}

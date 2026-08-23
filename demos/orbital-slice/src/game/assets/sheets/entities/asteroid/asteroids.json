@@ -1,0 +1,62 @@
+{
+	"textures": [
+		{
+			"image": "asteroids.png",
+			"format": "RGBA8888",
+			"size": {
+				"w": 300,
+				"h": 150
+			},
+			"scale": 1,
+			"frames": [
+				{
+					"filename": "asteroid_1.png",
+					"rotated": false,
+					"trimmed": false,
+					"sourceSize": {
+						"w": 150,
+						"h": 150
+					},
+					"spriteSourceSize": {
+						"x": 0,
+						"y": 0,
+						"w": 150,
+						"h": 150
+					},
+					"frame": {
+						"x": 0,
+						"y": 0,
+						"w": 150,
+						"h": 150
+					}
+				},
+				{
+					"filename": "asteroid_2.png",
+					"rotated": false,
+					"trimmed": false,
+					"sourceSize": {
+						"w": 150,
+						"h": 150
+					},
+					"spriteSourceSize": {
+						"x": 0,
+						"y": 0,
+						"w": 150,
+						"h": 150
+					},
+					"frame": {
+						"x": 150,
+						"y": 0,
+						"w": 150,
+						"h": 150
+					}
+				}
+			]
+		}
+	],
+	"meta": {
+		"app": "https://www.codeandweb.com/texturepacker",
+		"version": "3.0",
+		"smartupdate": "$TexturePacker:SmartUpdate:a8f8e47107c20ae47265240863f15d92:488a0b22d99f60ece3805928443e964c:3cb2167982f406a3d6627570b02f9be7$"
+	}
+}

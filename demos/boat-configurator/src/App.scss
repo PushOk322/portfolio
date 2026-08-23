@@ -1,0 +1,12 @@
+.app {
+	display: flex;
+	/* dvh, not vh: mobile browser chrome would push the panel off-screen. */
+	height: 100dvh;
+	overflow: hidden;
+	font-family: 'Exo 2', system-ui, sans-serif;
+	background: #0d1117;
+}
+
+@media (max-width: 900px) {
+	.app { flex-direction: column; }
+}

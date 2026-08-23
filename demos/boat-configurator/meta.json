@@ -1,0 +1,15 @@
+{
+  "slug": "boat-configurator",
+  "title": "Boat Configurator",
+  "tagline": "Three.js inside a React + TypeScript app, shipped to production.",
+  "tags": [
+    "React",
+    "TypeScript",
+    "Three.js",
+    "Redux Toolkit",
+    "Draco"
+  ],
+  "accent": "#22b8a6",
+  "poster": "poster.webp",
+  "posterIsPlaceholder": true
+}

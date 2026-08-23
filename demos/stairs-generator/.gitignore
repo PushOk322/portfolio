@@ -1,0 +1,8 @@
+node_modules/
+.worktrees/
+.vscode/
+.claude/
+TEMP/
+package-lock.json
+temp.html
+dist/

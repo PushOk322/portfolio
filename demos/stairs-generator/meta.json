@@ -1,0 +1,15 @@
+{
+  "slug": "stairs-generator",
+  "title": "Stairs Generator",
+  "tagline": "Five sliders solve the geometry — the staircase is assembled at runtime.",
+  "tags": [
+    "Three.js",
+    "Procedural geometry",
+    "Zero dependencies",
+    "WebXR",
+    "node:test"
+  ],
+  "accent": "#4c8dff",
+  "poster": "poster.webp",
+  "posterIsPlaceholder": true
+}

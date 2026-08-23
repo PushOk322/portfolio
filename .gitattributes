@@ -1,0 +1,32 @@
+# Normalise line endings in the repo, check out native on each machine.
+#
+# Not cosmetic: a CRLF markdown file silently broke the case-study renderer during
+# development, because splitting on /\n{2,}/ never matches \r\n\r\n. One rule here is
+# cheaper than remembering that.
+* text=auto eol=lf
+
+# Binary — never touch these, never try to diff them.
+*.glb   binary
+*.gltf  binary
+*.hdr   binary
+*.webp  binary
+*.png   binary
+*.jpg   binary
+*.jpeg  binary
+*.gif   binary
+*.mp3   binary
+*.ogg   binary
+*.mp4   binary
+*.woff  binary
+*.woff2 binary
+*.ttf   binary
+*.otf   binary
+*.ico   binary
+*.pdf   binary
+
+# Vendored libraries and generated fixtures: keep them out of diffs and out of the
+# language statistics on the repo page, so GitHub reports what I actually wrote.
+demos/*/js/libs/**      linguist-vendored
+demos/*/src/three/**    -linguist-vendored
+demos/*/**/fixtures.js  linguist-generated
+demos/*/**/fixtures.json linguist-generated

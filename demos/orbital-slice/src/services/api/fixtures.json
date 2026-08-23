@@ -1,0 +1,253 @@
+{
+  "_comment": "Invented data for the portfolio build. Shapes match src/types/services.types.ts; values are not real player data.",
+  "dailyCombo": {
+    "planet_1": 2,
+    "planet_2": 5,
+    "planet_3": 1,
+    "planet_4": 7,
+    "planet_5": 3,
+    "bonus_real": 25000,
+    "bonus_visible": 25000
+  },
+  "planets": {
+    "planets": [
+      {
+        "planet_id": 1,
+        "image": "",
+        "name_uk": "Планета 1",
+        "name_ru": "Планета 1",
+        "name_en": "Planet 1",
+        "points_real": 50,
+        "points_visible": 50
+      },
+      {
+        "planet_id": 2,
+        "image": "",
+        "name_uk": "Планета 2",
+        "name_ru": "Планета 2",
+        "name_en": "Planet 2",
+        "points_real": 75,
+        "points_visible": 75
+      },
+      {
+        "planet_id": 3,
+        "image": "",
+        "name_uk": "Планета 3",
+        "name_ru": "Планета 3",
+        "name_en": "Planet 3",
+        "points_real": 100,
+        "points_visible": 100
+      },
+      {
+        "planet_id": 4,
+        "image": "",
+        "name_uk": "Планета 4",
+        "name_ru": "Планета 4",
+        "name_en": "Planet 4",
+        "points_real": 140,
+        "points_visible": 140
+      },
+      {
+        "planet_id": 5,
+        "image": "",
+        "name_uk": "Планета 5",
+        "name_ru": "Планета 5",
+        "name_en": "Planet 5",
+        "points_real": 190,
+        "points_visible": 190
+      },
+      {
+        "planet_id": 6,
+        "image": "",
+        "name_uk": "Планета 6",
+        "name_ru": "Планета 6",
+        "name_en": "Planet 6",
+        "points_real": 250,
+        "points_visible": 250
+      },
+      {
+        "planet_id": 7,
+        "image": "",
+        "name_uk": "Планета 7",
+        "name_ru": "Планета 7",
+        "name_en": "Planet 7",
+        "points_real": 320,
+        "points_visible": 320
+      }
+    ]
+  },
+  "leaderboard": [
+    {
+      "username": "nova_rider",
+      "time_in_game": "2026-05-10T12:10:00Z",
+      "score": 37692,
+      "avatar_url": ""
+    },
+    {
+      "username": "astra",
+      "time_in_game": "2026-05-11T12:11:00Z",
+      "score": 33734,
+      "avatar_url": ""
+    },
+    {
+      "username": "cometcat",
+      "time_in_game": "2026-05-12T12:12:00Z",
+      "score": 30023,
+      "avatar_url": ""
+    },
+    {
+      "username": "void_walker",
+      "time_in_game": "2026-05-13T12:13:00Z",
+      "score": 26570,
+      "avatar_url": ""
+    },
+    {
+      "username": "lunar_fox",
+      "time_in_game": "2026-05-14T12:14:00Z",
+      "score": 23381,
+      "avatar_url": ""
+    },
+    {
+      "username": "pulsar",
+      "time_in_game": "2026-05-15T12:15:00Z",
+      "score": 20458,
+      "avatar_url": ""
+    },
+    {
+      "username": "orbit_kid",
+      "time_in_game": "2026-05-16T12:16:00Z",
+      "score": 17798,
+      "avatar_url": ""
+    },
+    {
+      "username": "meteorite",
+      "time_in_game": "2026-05-17T12:17:00Z",
+      "score": 15395,
+      "avatar_url": ""
+    },
+    {
+      "username": "sol_flare",
+      "time_in_game": "2026-05-18T12:18:00Z",
+      "score": 13239,
+      "avatar_url": ""
+    },
+    {
+      "username": "ringmaker",
+      "time_in_game": "2026-05-19T12:19:00Z",
+      "score": 11319,
+      "avatar_url": ""
+    },
+    {
+      "username": "driftwood",
+      "time_in_game": "2026-05-20T12:20:00Z",
+      "score": 9621,
+      "avatar_url": ""
+    },
+    {
+      "username": "quasar",
+      "time_in_game": "2026-05-21T12:21:00Z",
+      "score": 8129,
+      "avatar_url": ""
+    },
+    {
+      "username": "helix",
+      "time_in_game": "2026-05-22T12:22:00Z",
+      "score": 6828,
+      "avatar_url": ""
+    },
+    {
+      "username": "ion_storm",
+      "time_in_game": "2026-05-23T12:23:00Z",
+      "score": 5701,
+      "avatar_url": ""
+    },
+    {
+      "username": "starfall",
+      "time_in_game": "2026-05-24T12:24:00Z",
+      "score": 4731,
+      "avatar_url": ""
+    }
+  ],
+  "topLeaderboard": [
+    {
+      "username": "nova_rider",
+      "position": 1,
+      "coin_reward": 50000,
+      "ton_reward": 2.5,
+      "avatar_url": "",
+      "is_current_user": false
+    },
+    {
+      "username": "astra",
+      "position": 2,
+      "coin_reward": 45000,
+      "ton_reward": 2.25,
+      "avatar_url": "",
+      "is_current_user": false
+    },
+    {
+      "username": "cometcat",
+      "position": 3,
+      "coin_reward": 40000,
+      "ton_reward": 2.0,
+      "avatar_url": "",
+      "is_current_user": false
+    },
+    {
+      "username": "void_walker",
+      "position": 4,
+      "coin_reward": 35000,
+      "ton_reward": 1.75,
+      "avatar_url": "",
+      "is_current_user": false
+    },
+    {
+      "username": "lunar_fox",
+      "position": 5,
+      "coin_reward": 30000,
+      "ton_reward": 1.5,
+      "avatar_url": "",
+      "is_current_user": false
+    },
+    {
+      "username": "pulsar",
+      "position": 6,
+      "coin_reward": 25000,
+      "ton_reward": 1.25,
+      "avatar_url": "",
+      "is_current_user": false
+    },
+    {
+      "username": "orbit_kid",
+      "position": 7,
+      "coin_reward": 20000,
+      "ton_reward": 1.0,
+      "avatar_url": "",
+      "is_current_user": false
+    },
+    {
+      "username": "meteorite",
+      "position": 8,
+      "coin_reward": 15000,
+      "ton_reward": 0.75,
+      "avatar_url": "",
+      "is_current_user": false
+    },
+    {
+      "username": "sol_flare",
+      "position": 9,
+      "coin_reward": 10000,
+      "ton_reward": 0.5,
+      "avatar_url": "",
+      "is_current_user": false
+    },
+    {
+      "username": "ringmaker",
+      "position": 10,
+      "coin_reward": 5000,
+      "ton_reward": 0.25,
+      "avatar_url": "",
+      "is_current_user": false
+    }
+  ]
+}

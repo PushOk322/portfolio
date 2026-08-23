@@ -1,0 +1,12 @@
+{
+  "name": "portfolio",
+  "private": true,
+  "type": "module",
+  "description": "Pavlo Tyshkovets — demo portfolio. Builds every demo plus the index site into one deployable dist/.",
+  "author": "Pavlo Tyshkovets",
+  "scripts": {
+    "build": "node build.mjs",
+    "build:fast": "node build.mjs --no-install",
+    "preview": "npx --yes http-server dist -p 8080 -c-1"
+  }
+}

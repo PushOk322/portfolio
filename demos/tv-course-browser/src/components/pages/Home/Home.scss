@@ -1,0 +1,17 @@
+@keyframes home {
+	from {
+		opacity: 0;
+	}
+	to {
+		opacity: 1;
+	}
+}
+
+.home {
+	animation: home 1s ease-in-out;
+}
+
+.home{
+    width: 100%;
+    margin: 0 0 4vw 0;
+}

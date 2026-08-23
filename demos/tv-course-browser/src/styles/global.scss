@@ -1,0 +1,15 @@
+@import "./webfonts.scss";
+@import "./fonts.scss";
+@import "./reset.scss";
+@import "./variables/colors.scss";
+@import "./variables/base.scss";
+@import "./mixins/media.scss";
+
+
+body {
+ background: var(--bodyBG);
+ color: var(--white);
+ font-family: "Fixel";
+}
+
+::-webkit-scrollbar { width: 0;}

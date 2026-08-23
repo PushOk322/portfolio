@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8" />
+  <meta content="width=device-width, initial-scale=1.0" name="viewport" />
+  <title>Joinery Configurator — window reference</title>
+  <style>
+    body { margin: 0; font: 14px/1.5 system-ui, sans-serif; }
+    #viewer { width: 100%; height: 100vh; background: #e3e3e3; }
+  </style>
+</head>
+
+<body>
+  <!-- The configurator creates its own canvas inside this element. -->
+  <div id="viewer"></div>
+
+  <!-- Three.js is bundled into the configurator; this importmap exists only so
+       the unbundled source runs during development. The shipped bundle needs no
+       importmap at all. -->
+  <script type="importmap">{
+    "imports": {
+      "three": "../js/libs/three.0.183.2/build/three.module.min.js",
+      "three/addons/": "../js/libs/three.0.183.2/examples/jsm/"
+    }
+  }</script>
+
+  <script type="module">
+    import {
+      mount, applyConfiguration, getConfiguration, whenSettled, PRODUCT_TYPE,
+    } from '../js/integration/entry-window.js';
+
+    const CONFIG = {
+      schemaVersion: '1.0',
+      locale: 'en',
+      dimensions: { widthMm: 1600, heightMm: 1400 },
+      profile: { material: 'pvc', series: '70', offset: 'zonder' },
+      colors: { exteriorHex: '#F1F0EB', interiorHex: '#F1F0EB' },
+      presentation: { view: 'inside' },
+      options: {
+        layout: {
+          columns: 2, rows: 2, transom: true,
+          sections: [
+            { row: 0, col: 0, colSpan: 2, opening: 'fixed' },
+            { row: 1, col: 0, opening: 'tilt_turn_right' },
+            { row: 1, col: 1, opening: 'tilt_turn_left' },
+          ],
+        },
+        handleModel: 1, handleColor: 'hc_chrome', grille: 'none',
+      },
+    };
+
+    await mount(document.getElementById('viewer'), {
+      configuration: CONFIG,
+      onError: result => console.error('JOINERY_CONFIG errors', result.errors),
+    });
+
+    // The page has no controls — it is driven from devtools. `send` applies a
+    // payload and resolves with the validation result once the scene settles,
+    // so the console shows warnings instead of them scrolling past unseen.
+    const send = async (config) => {
+      const result = applyConfiguration(config);
+      await whenSettled();
+      return result;
+    };
+
+    window.__api = {
+      mount, applyConfiguration, getConfiguration, whenSettled, send,
+      PRODUCT_TYPE, CONFIG,
+    };
+
+    console.info(`JOINERY_CONFIG mounted (${PRODUCT_TYPE}) — use __api.send(__api.CONFIG)`);
+  </script>
+</body>
+
+</html>

@@ -1,0 +1,7 @@
+node_modules/
+.vscode/
+TEMP/
+temp.html
+dist/
+deploy/
+release/

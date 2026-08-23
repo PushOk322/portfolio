@@ -1,0 +1,21 @@
+.nav-button {
+	color: var(--white);
+	font-size: 1.15vw;
+	font-weight: 500;
+	line-height: 1.36;
+	padding: 0 2.08vw;
+	transition: all 0.2s ease-in-out;
+	border-radius: 4.17vw;
+	height: 3.1vw;
+	display: flex;
+	align-items: center;
+
+	&.focused {
+		color: var(--white);
+		background: var(--middle-grey);
+	}
+	&.isActive {
+		background: var(--darker-green);
+		color: var(--black);
+	}
+}

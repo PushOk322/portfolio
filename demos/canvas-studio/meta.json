@@ -1,0 +1,15 @@
+{
+  "slug": "canvas-studio",
+  "title": "Canvas Studio",
+  "tagline": "A product designer and three hand-drawn charts, straight off the 2D API.",
+  "tags": [
+    "Fabric.js",
+    "Konva",
+    "Canvas 2D",
+    "GSAP",
+    "Vite"
+  ],
+  "accent": "#f97316",
+  "poster": "poster.webp",
+  "posterIsPlaceholder": true
+}

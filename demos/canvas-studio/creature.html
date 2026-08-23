@@ -1,0 +1,33 @@
+<!--
+  ============================================================================
+  Modified portfolio build. Client branding, proprietary data, and backend
+  integrations have been removed or replaced with mock data. Not the production
+  application. Source structure preserved for demonstration purposes only.
+  ============================================================================
+  Canvas Studio — 2D canvas experiments built at Avada Media.
+  Showcase build; see DEMO_NOTICE.md.
+-->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8"/>
+    <meta
+            name="viewport"
+            content="width=device-width, initial-scale=1.0"
+    />
+    <link rel="stylesheet" href="./src/konva/creature.css"/>
+    <link rel="stylesheet" href="./src/normalize.css"/>
+    <title>Creature Builder — Canvas Studio</title>
+    <link rel="stylesheet" href="./src/nav.css"/>
+    <link rel="stylesheet" href="./portfolio/badge.css"/>
+</head>
+<body data-pf-badge-text="Portfolio build" data-pf-badge-back="../../">
+<div id="container"></div>
+<input type="file" id="imageUpload1" accept="image/*"/>
+<input type="file" id="imageUpload2" accept="image/*"/>
+<script type="module" src="./src/konva/creature.js"></script>
+<script type="module" src="./src/nav.js"></script>
+<script type="module" src="./src/fit.js"></script>
+<script type="module" src="./portfolio/badge.js"></script>
+</body>
+</html>

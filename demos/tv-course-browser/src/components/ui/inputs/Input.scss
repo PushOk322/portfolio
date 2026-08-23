@@ -1,0 +1,67 @@
+.input {
+	display: block;
+	position: relative;
+
+	&__form {
+		min-width: 30.3vw;
+		max-width: 30.3vw;
+		height: 3.33vw;
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		background: var(--light-grey);
+		border-radius: 0.52vw;
+		transition: all 0.2s ease-in-out;
+		padding: 0 16px 0 24px;
+		text-align: left; /* Default alignment */
+		color: var(--white);
+		font-size: 1.15vw;
+		font-weight: 500;
+		line-height: 1.2;
+
+		/* Center text for tel input */
+		&.tel {
+			text-align: center;
+		}
+	}
+
+	&__form::placeholder {
+		text-align: center;
+	}
+
+	.focused {
+		border: 1px solid var(--light-green);
+	}
+
+	.error {
+		display: flex;
+		flex-direction: column;
+		margin: 0 0 16px;
+	}
+
+	&__aprove {
+		position: absolute;
+		top: 50%;
+		right: 0.83vw;
+		transform: translate(-50%, -50%);
+		width: 1.25vw;
+		height: 1.25vw;
+	}
+
+	&__alarm {
+		position: absolute;
+		top: 50%;
+		right: 0.83vw;
+		transform: translate(-50%, -100%);
+		min-width: 1.25vw;
+		min-height: 1.25vw;
+	}
+
+	&__label {
+		margin: 1.25vw 0 1.25vw 0;
+		color: var(--red);
+		font-size: 1vw;
+		font-weight: 400;
+		transition: all 0.2s ease-in-out;
+	}
+}

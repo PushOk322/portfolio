@@ -1,0 +1,15 @@
+{
+  "slug": "joinery-configurator",
+  "title": "Joinery Configurator",
+  "tagline": "Seven product families driven by one config object, in real-time 3D.",
+  "tags": [
+    "Three.js",
+    "WebXR",
+    "Morph targets",
+    "esbuild",
+    "Contract tests"
+  ],
+  "accent": "#f59e0b",
+  "poster": "poster.webp",
+  "posterIsPlaceholder": true
+}

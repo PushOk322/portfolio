@@ -1,0 +1,45 @@
+<!--
+  ============================================================================
+  Modified portfolio build. Client branding, proprietary data, and backend
+  integrations have been removed or replaced with mock data. Not the production
+  application. Source structure preserved for demonstration purposes only.
+  ============================================================================
+  Canvas Studio — 2D canvas experiments built at Avada Media.
+  Showcase build; see DEMO_NOTICE.md.
+-->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8"/>
+    <meta
+            name="viewport"
+            content="width=device-width, initial-scale=1.0"
+    />
+    <link rel="stylesheet" href="./src/fabric/t-shirt-fabric.css"/>
+    <link rel="stylesheet" href="./src/normalize.css"/>
+    <title>T-shirt Designer — Canvas Studio</title>
+    <link rel="stylesheet" href="./src/nav.css"/>
+    <link rel="stylesheet" href="./portfolio/badge.css"/>
+</head>
+<body data-pf-badge-text="Portfolio build" data-pf-badge-back="../../">
+<canvas id="myCanvas"></canvas>
+<input type="file" id="imageUpload" accept="image/*"/>
+<button id="sampleButton">Add sample artwork</button>
+<button id="deleter">Choose an image to delete</button>
+
+<input type="text" id="textInput"/>
+<button id="textButton" disabled>Add text</button>
+
+<button id="triangleButton">Add triangle</button>
+<button id="rectangleButton">Add rectangle</button>
+<button id="circleButton">Add circle</button>
+
+<button id="downloadButton">Download</button>
+
+
+<script type="module" src="./src/fabric/t-shirt-fabric.js"></script>
+<script type="module" src="./src/nav.js"></script>
+<script type="module" src="./src/fit.js"></script>
+<script type="module" src="./portfolio/badge.js"></script>
+</body>
+</html>

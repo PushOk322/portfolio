@@ -1,0 +1,63 @@
+<section class="ui__game game-screen">
+	<div class="game-screen__head">
+		<div class="game-screen__score">
+			<div class="game-screen__score-value">
+				score: <span class="current-score">0</span>
+				<p class="game-screen__counter-planet">planet: <span class="counter-planet">0</span></p>
+			</div>
+			<p class="game-screen__score-best">best score: <span class="best-score">90</span></p>
+
+			<div class="game-screen__score-icon-wrap">
+				<img
+					class="game-screen__score-icon"
+					width="40"
+					height="40"
+					src="./src/assets/images/planets/ui-planet-1.png"
+					alt="Planet"
+				/>
+
+				<span class="game-screen__timer arcade-timer">1</span>
+			</div>
+
+			<div class="game-screen__add-score"></div>
+		</div>
+
+		<ul class="game-screen__life life">
+			<li class="life__item">
+				<img src="src/assets/images/life/sword-laser-1.png" alt="Sword" class="life__image" />
+				<img src="src/assets/images/life/sword-handle-1.png" alt="Sword" class="life__image" />
+			</li>
+
+			<li class="life__item">
+				<img src="src/assets/images/life/sword-laser-1.png" alt="Sword" class="life__image" />
+				<img src="src/assets/images/life/sword-handle-1.png" alt="Sword" class="life__image" />
+			</li>
+
+			<li class="life__item">
+				<img src="src/assets/images/life/sword-laser-1.png" alt="Sword" class="life__image" />
+				<img src="src/assets/images/life/sword-handle-1.png" alt="Sword" class="life__image" />
+			</li>
+		</ul>
+	</div>
+
+	<div class="game-screen__menu">
+		<h2 class="game-screen__menu-title">Game Over</h2>
+
+		<div class="game-screen__menu-text">
+			<p class="game-screen__menu-score">Score: <span class="current-score">0</span></p>
+			<p class="game-screen__menu-best">Best score: <span class="best-score">90</span></p>
+		</div>
+
+		<div class="game-screen__menu-buttons">
+			<button id="refresh-game" class="game-screen__btn">
+				<img src="./src/assets/icons/refresh.svg" alt="round arrow" />
+			</button>
+
+			<button id="continue-game" class="game-screen__btn">Continue</button>
+
+			<button id="menu-game" class="game-screen__btn">
+				<img src="./src/assets/icons/menu.svg" alt="menu" />
+			</button>
+		</div>
+	</div>
+</section>

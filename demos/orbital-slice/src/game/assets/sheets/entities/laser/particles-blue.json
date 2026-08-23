@@ -1,0 +1,79 @@
+{
+	"frames": [
+		{
+			"filename": "particle-blue_1.png",
+			"frame": {
+				"x": 0,
+				"y": 0,
+				"w": 90,
+				"h": 30
+			},
+			"rotated": false,
+			"trimmed": false,
+			"spriteSourceSize": {
+				"x": 0,
+				"y": 0,
+				"w": 90,
+				"h": 30
+			},
+			"sourceSize": {
+				"w": 90,
+				"h": 30
+			}
+		},
+		{
+			"filename": "particle-blue_2.png",
+			"frame": {
+				"x": 90,
+				"y": 0,
+				"w": 90,
+				"h": 30
+			},
+			"rotated": false,
+			"trimmed": false,
+			"spriteSourceSize": {
+				"x": 0,
+				"y": 0,
+				"w": 90,
+				"h": 30
+			},
+			"sourceSize": {
+				"w": 90,
+				"h": 30
+			}
+		},
+		{
+			"filename": "particle-blue_3.png",
+			"frame": {
+				"x": 180,
+				"y": 0,
+				"w": 90,
+				"h": 30
+			},
+			"rotated": false,
+			"trimmed": false,
+			"spriteSourceSize": {
+				"x": 0,
+				"y": 0,
+				"w": 90,
+				"h": 30
+			},
+			"sourceSize": {
+				"w": 90,
+				"h": 30
+			}
+		}
+	],
+	"meta": {
+		"app": "https://www.codeandweb.com/texturepacker",
+		"version": "1.0",
+		"image": "particles-blue.png",
+		"format": "RGBA8888",
+		"size": {
+			"w": 270,
+			"h": 30
+		},
+		"scale": "1",
+		"smartupdate": "$TexturePacker:SmartUpdate:11cca06b548dbb913491dee66596680b:09719a353d722e171cbbeb8050586557:08a72f822a2b5333e0e7c014346f8620$"
+	}
+}

@@ -1,0 +1,13 @@
+export { default as asteroid1 } from '@entitiesGame/asteroid/asteroid1.png';
+export { default as asteroid2 } from '@entitiesGame/asteroid/asteroid2.png';
+export { default as planet1 } from '@entitiesGame/planet/planet1.png';
+export { default as planet2 } from '@entitiesGame/planet/planet2.png';
+export { default as planet3 } from '@entitiesGame/planet/planet3.png';
+export { default as planet4 } from '@entitiesGame/planet/planet4.png';
+export { default as planet5 } from '@entitiesGame/planet/planet5.png';
+export { default as planet6 } from '@entitiesGame/planet/planet6.png';
+export { default as planet7 } from '@entitiesGame/planet/planet7.png';
+export { default as planetCore1 } from '@entitiesGame/planet/planet-core1.png';
+export { default as planetCore2 } from '@entitiesGame/planet/planet-core2.png';
+export { default as rip1 } from '@entitiesGame/rip/rip1.png';
+export { default as rip2 } from '@entitiesGame/rip/rip2.png';

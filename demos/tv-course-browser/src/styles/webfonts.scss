@@ -1,0 +1,37 @@
+/* Self-hosted webfonts.
+   index.html linked four Google Fonts stylesheets, so every visitor's IP reached Google
+   before first paint — and on a TV with a slow connection, four blocking stylesheets is
+   a visible delay. Only Oswald and Montserrat are actually used; Roboto and IBM Plex
+   Sans were linked and never referenced. Latin subset, 400 + 600. */
+
+@font-face {
+	font-family: 'Oswald';
+	font-style: normal;
+	font-weight: 400;
+	font-display: swap;
+	src: url('../assets/fonts/web/oswald-latin-400-normal.woff2') format('woff2');
+}
+
+@font-face {
+	font-family: 'Oswald';
+	font-style: normal;
+	font-weight: 600;
+	font-display: swap;
+	src: url('../assets/fonts/web/oswald-latin-600-normal.woff2') format('woff2');
+}
+
+@font-face {
+	font-family: 'Montserrat';
+	font-style: normal;
+	font-weight: 400;
+	font-display: swap;
+	src: url('../assets/fonts/web/montserrat-latin-400-normal.woff2') format('woff2');
+}
+
+@font-face {
+	font-family: 'Montserrat';
+	font-style: normal;
+	font-weight: 600;
+	font-display: swap;
+	src: url('../assets/fonts/web/montserrat-latin-600-normal.woff2') format('woff2');
+}

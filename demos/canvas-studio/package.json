@@ -1,0 +1,22 @@
+{
+  "name": "canvas-studio",
+  "private": true,
+  "version": "0.0.0",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview"
+  },
+  "devDependencies": {
+    "vite": "^6.3.5"
+  },
+  "dependencies": {
+    "chart.js": "^4.5.0",
+    "fabric": "^6.7.0",
+    "gsap": "^3.13.0",
+    "konva": "^9.3.22"
+  },
+  "description": "2D canvas experiments — Fabric.js, Konva and hand-drawn charts. Portfolio showcase build (originally built at Avada Media).",
+  "author": "Pavlo Tyshkovets"
+}

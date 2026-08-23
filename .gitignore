@@ -1,0 +1,32 @@
+# Dependencies
+node_modules/
+
+# Build output — every demo builds to dist/, the joinery embed build to dist-embed/,
+# and the whole portfolio assembles into the root dist/.
+dist/
+dist-embed/
+
+# The site's seven HTML pages are generated from demos/*/meta.json and CASE_STUDY.md
+# by site/scripts/build-pages.mjs. Committing them would mean two sources of truth.
+/site/*.html
+
+# Secrets. Nothing in this repo should ever have one — every demo runs on local
+# fixtures — but an ignore rule costs nothing and a leaked key costs a rotation.
+.env
+.env.*
+!.env.example
+*.pem
+*.key
+*.p12
+
+# Editor and OS noise
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db
+*.swp
+
+# Local scratch
+TEMP/
+temp.html
+*.log

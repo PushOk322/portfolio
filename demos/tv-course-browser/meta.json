@@ -1,0 +1,15 @@
+{
+  "slug": "tv-course-browser",
+  "title": "TV Course Browser",
+  "tagline": "The same React you know, with the mouse taken away.",
+  "tags": [
+    "React",
+    "Tizen",
+    "Spatial navigation",
+    "Zustand",
+    "webpack"
+  ],
+  "accent": "#38bdf8",
+  "poster": "poster.webp",
+  "posterIsPlaceholder": true
+}

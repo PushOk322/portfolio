@@ -1,0 +1,78 @@
+/* Shared demo navigation. Deliberately plain: the experiments below it are the
+   colour, and several of them draw fullscreen, so the strip has to stay out of the way.
+
+   position: sticky rather than fixed — some pages (scroll sequence) are tall documents
+   where a fixed bar would overlap their own scroll effects. */
+
+/* position: fixed, not sticky. Several of these pages set `display: flex` on <body>
+   for their own centring, which makes a sticky nav a flex item — it then sizes to
+   max-content (745px), refuses to shrink because flex items default to min-width:auto,
+   and drags a 191px horizontal overflow onto every page. Fixed takes it out of flow
+   entirely, so no page's body layout can reach it. The body padding below reserves
+   the space it no longer occupies. */
+.demo-nav {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 100;
+  background: rgba(255, 255, 255, 0.94);
+  border-bottom: 1px solid #e2e8f0;
+  backdrop-filter: blur(8px);
+}
+
+body { padding-top: 44px; }
+
+.demo-nav__list {
+  display: flex;
+  gap: 2px;
+  margin: 0;
+  padding: 6px 10px;
+  list-style: none;
+  overflow-x: auto;
+  /* Without this the flex row refuses to shrink below its content width. */
+  min-width: 0;
+  /* Momentum scrolling on a phone; the strip is wider than 380px on purpose
+     rather than wrapping to three lines and eating the viewport. */
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: thin;
+}
+
+.demo-nav__link {
+  display: block;
+  padding: 7px 11px;
+  font: 400 13px/1 Inter, "Segoe UI", system-ui, sans-serif;
+  white-space: nowrap;
+  color: #475569;
+  text-decoration: none;
+  border-radius: 6px;
+}
+
+.demo-nav__link:hover { background: #f1f5f9; color: #0f172a; }
+.demo-nav__link:focus-visible { outline: 2px solid #0f172a; outline-offset: -2px; }
+.demo-nav__link.is-current { background: #0f172a; color: #fff; }
+
+@media (max-width: 560px) {
+  .demo-nav__list { padding: 5px 8px; }
+  .demo-nav__link { padding: 8px 10px; font-size: 12px; }
+}
+
+/* Wrapper injected by fit.js around the whole page body. transform-origin must be the
+   top-left corner or the scaled content drifts out of its own box. */
+/* position: relative is load-bearing, not decoration. One page absolutely positions a
+   decorative image with no `left`, and with no positioned ancestor its containing block
+   is the initial containing block — which escapes html/body overflow clipping entirely,
+   so the page scrolled 202px sideways on desktop. On mobile it did not, because the
+   scale transform happens to establish a containing block; making the wrapper relative
+   makes both viewports behave the same way. */
+.fit-page {
+  transform-origin: top left;
+  position: relative;
+}
+
+/* No sideways scroll, ever: it reads as a broken layout, and one page parks a
+   decorative image ~200px past the right edge on purpose.
+   Both elements, not just body — with `html` left visible the viewport takes its
+   overflow from `html`, so a body-only rule still scrolls (measured: scrollX 202).
+   Safe here because the nav is fixed rather than sticky. */
+html, body { overflow-x: hidden; }

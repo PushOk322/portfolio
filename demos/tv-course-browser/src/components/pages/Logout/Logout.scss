@@ -1,0 +1,27 @@
+.logout {
+	min-height: 90vh;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+
+	&__content {
+		display: flex;
+		flex-direction: column;
+		align-items: center;
+		justify-content: center;
+		min-width: 43vw;
+		max-width: 53vw;
+		padding: 5.77vw;
+		aspect-ratio: 16 / 9;
+	}
+
+	&__content-title {
+		color: var(--white);
+		font-size: 2.5vw;
+		font-weight: 800;
+		line-height: 1.25;
+		text-align: center;
+		margin: 0 0 0.83vw;
+		text-transform: uppercase;
+	}
+}

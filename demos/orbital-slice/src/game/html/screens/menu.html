@@ -1,0 +1,36 @@
+<section class="ui__settings setting-screen">
+	<!-- Left Block-->
+	<div id="left-setting" class="setting-screen__left">
+		<!--Setting Buttons-->
+		<div class="setting-screen__btn-wrap">
+			{{> modules/menu-btn title='Connect Google' id='google-btn'}}
+			{{> modules/menu-btn title='Global rating' id='stat-btn'}}
+			{{> modules/menu-btn title='Achievements' id='achievements-btn'}}
+			{{> modules/menu-btn title='Game Info' id='info-btn'}}
+		</div>
+
+		<!--Modals-->
+		{{> modules/info-modal }}
+		{{> modules/achievements-modal }}
+		{{> modules/stat-modal }}
+	</div>
+
+	<!-- Right Block-->
+	<div class="setting-screen__music-wrap">
+		<button id="sound-btn" class="setting-screen__sound-btn audio-btn disable">
+			<img src="src/assets/icons/sound.svg" alt="sound off" class="on" />
+			<img src="src/assets/icons/sound-off.svg" alt="sound on" class="off" />
+		</button>
+
+		<button id="music-btn" class="setting-screen__music-btn audio-btn disable">
+			<img src="src/assets/icons/music.svg" alt="music off" class="on" />
+
+			<img src="src/assets/icons/music-off.svg" alt="music on" class="off" />
+		</button>
+	</div>
+
+	<div class="setting-screen__back-wrap">
+		{{> modules/planet-btn title = 'BACK TO MENU' className='setting-screen__exit-btn btn_back'
+		id='back-btn' image='./src/assets/entities/planet/planet6.png'}}
+	</div>
+</section>

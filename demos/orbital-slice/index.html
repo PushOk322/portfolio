@@ -1,0 +1,126 @@
+<!--
+  ============================================================================
+  Modified portfolio build. Client branding, proprietary data, and backend
+  integrations have been removed or replaced with mock data. Not the production
+  application. Source structure preserved for demonstration purposes only.
+  ============================================================================
+  Orbital Slice — the Phaser 3 game layer extracted from a Telegram Mini App
+  built at Avada Media. Showcase build; see DEMO_NOTICE.md.
+
+  This markup replaces the React screen that used to render it (Game.tsx, 837
+  lines of JSX). The game's UI classes — GameUI, GameOver, AboutGameUI,
+  LeaderboardPreGameUI, UI — reach into the DOM by selector and expect all of
+  it to exist at construction time, so the structure and class names below are
+  the originals. Only the i18n lookups became plain English and the <Icon>
+  components became <img>. Nothing here is game logic.
+-->
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+    <meta name="author" content="Pavlo Tyshkovets" />
+    <meta name="description" content="Phaser 3 arcade game — slice planets, dodge asteroids, survive the black holes. Portfolio showcase build." />
+    <link rel="icon" type="image/png" href="./icons/astronaut.png" />
+    <link rel="stylesheet" href="./portfolio/badge.css" />
+    <title>Orbital Slice</title>
+  </head>
+
+  <body data-pf-badge-text="Portfolio build — mock data" data-pf-badge-back="../../">
+    <div class="wrapper" data-pf-badge-anchor>
+      <div id="root" class="ui">
+        <div class="preload show">
+          <div class="preload__leaders leaders">
+            <div class="leaderboard__pre-game"></div>
+          </div>
+
+          <img src="./images/game/preloader.gif" alt="" class="preload__image" />
+
+          <p class="preload__text">Loading <span id="load-progress">0</span>%</p>
+
+          <button type="button" class="play">Play</button>
+          <button type="button" class="attempts-btn">Attempts</button>
+        </div>
+
+        <div class="about-game">
+          <p class="about-game__title">How to play</p>
+          <p class="about-game__text">Slash across the planets to slice them.</p>
+
+          <div class="about-game__avoid"><p>Avoid the asteroids and the black holes.</p></div>
+          <div class="about-game__cut"><p>Hit the five bonus planets to claim the combo.</p></div>
+
+          <button type="button" class="about-game__close about-game__btns">Close</button>
+          <button type="button" class="about-game__btn about-game__btns">Got it</button>
+        </div>
+
+        <div class="game">
+          <div class="game__info">
+            <div class="game__best"><p>Best: <span>0</span></p></div>
+
+            <div class="game__life">
+              <span>Lives:</span>
+              <ul class="game__life-list">
+                <li class="game__life-item"><img src="./images/game/icons/heart.svg" alt="life" /></li>
+                <li class="game__life-item"><img src="./images/game/icons/heart.svg" alt="life" /></li>
+                <li class="game__life-item"><img src="./images/game/icons/heart.svg" alt="life" /></li>
+              </ul>
+            </div>
+          </div>
+
+          <div class="game__bonus">
+            <p class="game__bonus-title">Bonus</p>
+
+            <ul class="game__bonus-list">
+              <li class="game__bonus-item"><img src="./images/game/icons/question.svg" alt="" /></li>
+              <li class="game__bonus-item"><img src="./images/game/icons/question.svg" alt="" /></li>
+              <li class="game__bonus-item"><img src="./images/game/icons/question.svg" alt="" /></li>
+              <li class="game__bonus-item"><img src="./images/game/icons/question.svg" alt="" /></li>
+              <li class="game__bonus-item"><img src="./images/game/icons/question.svg" alt="" /></li>
+            </ul>
+
+            <p class="game__bonus-amount"><span class="bonus_point_item">+0</span></p>
+          </div>
+
+          <div class="game__score">
+            <p>Score: <span>0</span></p>
+            <p>Time: <span class="game-time">00:00:00</span></p>
+          </div>
+
+          <div class="game__bonus-info">
+            <span>Bonus</span>
+            <span class="bonus_point_item">+0</span>
+          </div>
+        </div>
+
+        <div class="game-over">
+          <p class="game-over__title">Game over</p>
+          <p class="game-over__score game-time">Time: <span>00:00:00</span></p>
+          <p class="game-over__score game-score">Score: <span>0</span></p>
+          <button type="button" class="game-over__btn">Continue</button>
+        </div>
+
+        <div class="game-success">
+          <p class="game-success__title">Combo complete</p>
+          <button type="button" class="game-success__restart">Play again</button>
+          <button type="button" class="game-success__back">Back</button>
+        </div>
+
+        <div class="game-screen__add-score"></div>
+
+        <div class="sound">
+          <img src="./images/game/icons/sound-off.svg" alt="sound off" class="sound__off" />
+          <img src="./images/game/icons/sound.svg" alt="sound on" class="sound__on show" />
+        </div>
+
+        <div class="game__btn-pause">
+          <img src="./images/game/icons/pause.svg" alt="pause" />
+        </div>
+      </div>
+
+      <div id="game-root" class="game-canvas"></div>
+    </div>
+
+    <script type="module" src="/src/main.ts"></script>
+    <script type="module" src="./portfolio/badge.js"></script>
+  </body>
+</html>

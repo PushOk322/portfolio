@@ -1,0 +1,19 @@
+{
+  "name": "stairs-generator",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "build": "node build.mjs",
+    "test": "node --test",
+    "lint": "eslint .",
+    "serve": "npx --yes http-server dist -p 8080 -c-1",
+    "serve:src": "npx --yes http-server . -p 8080 -c-1"
+  },
+  "devDependencies": {
+    "@eslint/js": "^10.0.1",
+    "eslint": "^10.7.0",
+    "globals": "^17.7.0"
+  },
+  "description": "Procedural 3D staircase configurator \u2014 portfolio showcase build (originally built at Marevo Vision).",
+  "author": "Pavlo Tyshkovets"
+}

@@ -1,0 +1,56 @@
+name: Build and deploy
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+# One deploy at a time. Two overlapping runs can publish out of order and leave the
+# older build live.
+concurrency:
+  group: pages-deploy
+  cancel-in-progress: true
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      deployments: write
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version-file: .nvmrc
+
+      # There is no root lockfile — each demo installs its own. Cache on the hash of
+      # every demo lockfile so a change in one demo does not invalidate the rest.
+      - uses: actions/cache@v4
+        with:
+          path: |
+            ~/.npm
+            demos/*/node_modules
+            site/node_modules
+          key: deps-${{ runner.os }}-${{ hashFiles('demos/*/package-lock.json', 'site/package-lock.json') }}
+          restore-keys: deps-${{ runner.os }}-
+
+      - name: Build everything
+        run: npm run build
+
+      # Every demo build can succeed while producing an empty dist/ if a path
+      # assumption breaks. A green deploy of an empty site is worse than a red build.
+      - name: Verify the build produced a site
+        run: |
+          test -f dist/index.html
+          for slug in $(ls demos | grep -v _shared); do
+            test -f "dist/demos/$slug/index.html" || { echo "missing demo: $slug"; exit 1; }
+          done
+          echo "dist/ = $(du -sh dist | cut -f1) across $(find dist -type f | wc -l) files"
+
+      - uses: cloudflare/wrangler-action@v3
+        with:
+          apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+          command: pages deploy dist --project-name=portfolio --branch=main

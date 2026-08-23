@@ -1,0 +1,69 @@
+@keyframes authorization {
+	from {
+		opacity: 0;
+	}
+	to {
+		opacity: 1;
+	}
+}
+
+.authorization {
+	min-height: 92vh;//was100
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	//transform: translateY(-3vw);
+	animation: authorization 1s ease-in-out;
+	transition: all 1s ease-in-out;
+	position: absolute;
+	top: 50%;
+	left: 50%;
+	transform: translate(-50%, -53%);
+
+	&__button {
+		min-width: 30.3vw;
+		max-width: 30.3vw;
+	}
+
+	&__button-enter {
+		background: var(--bodyBG);
+		border: 1.5px solid var(--white);
+		color: var(--white);
+	}
+
+	&__email-input {
+		min-width: 30.3vw;
+		max-width: 30.3vw;
+	}
+}
+
+.keyboard-open .authorization form {
+	transform: translateY(7vw);
+	transition: all 1.5s ease-in-out;
+}
+
+.lg-tv .authorization form {
+	margin-bottom: 12vw;//was 15
+	transition: all 0.5s ease-in-out;
+}
+
+.auth-inputs {
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	justify-content: center;
+
+	&__title {
+		color: var(--white);
+		font-family: 'Montserrat';
+		font-size: 2.5vw;
+		font-weight: 800;
+		text-align: center;
+		line-height: 1.2;
+		margin: 0 0 2.1vw;
+	}
+
+	&__margin {
+		margin-bottom: 1.25vw;
+	}
+}

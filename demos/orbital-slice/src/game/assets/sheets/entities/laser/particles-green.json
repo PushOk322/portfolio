@@ -1,0 +1,36 @@
+{"frames": [
+
+{
+	"filename": "laser-green_1.png",
+	"frame": {"x":0,"y":0,"w":90,"h":30},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":90,"h":30},
+	"sourceSize": {"w":90,"h":30}
+},
+{
+	"filename": "laser-green_2.png",
+	"frame": {"x":90,"y":0,"w":90,"h":30},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":90,"h":30},
+	"sourceSize": {"w":90,"h":30}
+},
+{
+	"filename": "laser-green_3.png",
+	"frame": {"x":180,"y":0,"w":90,"h":30},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":90,"h":30},
+	"sourceSize": {"w":90,"h":30}
+}],
+"meta": {
+	"app": "https://www.codeandweb.com/texturepacker",
+	"version": "1.0",
+	"image": "particles-green.png",
+	"format": "RGBA8888",
+	"size": {"w":270,"h":30},
+	"scale": "1",
+	"smartupdate": "$TexturePacker:SmartUpdate:c9ebdfdfb3ffc2e6102b3c4be6bab1d8:bac46c313e17399c2dac5ef483bca116:3cd0698201c2b1b0c299e436b3830d10$"
+}
+}

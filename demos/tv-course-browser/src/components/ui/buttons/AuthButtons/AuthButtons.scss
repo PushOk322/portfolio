@@ -1,0 +1,22 @@
+.auth-buttons {
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	justify-content: flex-start;
+	margin: 0 0 0vw;
+	
+	&__title {
+		color: var(--white);
+		font-family: 'Montserrat';
+		font-size: 2.5vw;
+		font-weight: 800;
+		text-align: center;
+		line-height: 1.2;
+		margin: 0 0 2.1vw;
+	}
+
+	&__margin {
+		margin-bottom: 1.25vw;
+	}
+}
+

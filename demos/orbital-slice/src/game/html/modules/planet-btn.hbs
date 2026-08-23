@@ -1,0 +1,21 @@
+<button id={{id}} class='{{className}} btn'>
+	<svg viewBox='0 0 120 120' width='220' height='220'>
+		<defs>
+			<path
+				id='circle'
+				d='
+        M 60, 60
+        m -37, 0
+        a 20,20 0 1,1 74,0
+        a 20,20 0 1,1 -74,0'
+			/>
+		</defs>
+		<text text-anchor='start'>
+			<textPath xlink:href='#circle' s text-anchor='middle' startOffset='50%'>
+				{{title}}
+			</textPath>
+		</text>
+	</svg>
+
+	<img src={{image}} alt='Planet' />
+</button>

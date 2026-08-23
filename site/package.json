@@ -1,0 +1,16 @@
+{
+  "name": "portfolio-site",
+  "private": true,
+  "type": "module",
+  "description": "Index site for Pavlo Tyshkovets' demo portfolio.",
+  "author": "Pavlo Tyshkovets",
+  "scripts": {
+    "pages": "node scripts/build-pages.mjs",
+    "dev": "npm run pages && vite",
+    "build": "npm run pages && vite build",
+    "preview": "vite preview"
+  },
+  "devDependencies": {
+    "vite": "^6.3.5"
+  }
+}

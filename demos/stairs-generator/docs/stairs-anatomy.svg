@@ -1,0 +1,122 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 780" width="1000" height="780" font-family="Inter, Segoe UI, sans-serif">
+  <defs>
+    <marker id="arr" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M 0 0 L 10 5 L 0 10 z" fill="#334155"/>
+    </marker>
+    <marker id="arrS" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+      <path d="M 0 0 L 10 5 L 0 10 z" fill="#b91c1c"/>
+    </marker>
+  </defs>
+
+  <rect x="0" y="0" width="1000" height="780" fill="#ffffff"/>
+
+  <text x="40" y="40" font-size="19" font-weight="700" fill="#0f172a">Stairs Generator — model anatomy &amp; origin conventions</text>
+  <text x="40" y="62" font-size="13" fill="#64748b">All dimensions in metres. +Y up, +Z = direction of ascent, +X = width across the flight.</text>
+
+  <!-- ================= PANEL A : SIDE ELEVATION ================= -->
+  <text x="40" y="100" font-size="15" font-weight="700" fill="#0f172a">A · Side elevation — worked example: 2 flights, n = 8 risers, k = [4, 4]</text>
+  <text x="40" y="120" font-size="13" fill="#b91c1c" font-weight="600">step pieces = n − N = 6      landings = N − 1 = 1</text>
+
+  <!-- ground + upper floor -->
+  <line x1="50" y1="380" x2="600" y2="380" stroke="#94a3b8" stroke-width="2"/>
+  <text x="52" y="398" font-size="11" fill="#64748b">lower floor (y = 0)</text>
+  <line x1="450" y1="140" x2="620" y2="140" stroke="#94a3b8" stroke-width="2"/>
+  <text x="500" y="132" font-size="11" fill="#64748b">upper floor = tread of riser 8 — no piece</text>
+
+  <!-- stringer under flight 1: pitched to the NOSING slope = atan(h / L), but its top
+       edge sits STRINGER_DROP below the nosing line, offset perpendicular to the rake
+       (not straight down). Runs (k-1)*L across and (k-1)*h up, ending one riser BELOW
+       the landing top. -->
+  <line x1="90" y1="380" x2="225" y2="290" stroke="#0f172a" stroke-width="11" opacity="0.2" stroke-linecap="butt"/>
+  <line x1="90" y1="380" x2="225" y2="290" stroke="#b91c1c" stroke-width="1" stroke-dasharray="4 3"/>
+  <text x="250" y="410" font-size="11" fill="#334155">stringer pitched to the nosing slope = atan(h / L), length = (k−1)·hypot(L, h)</text>
+  <text x="250" y="424" font-size="10" fill="#b91c1c">top edge sits STRINGER_DROP below the nosing line — perpendicular to the</text>
+  <text x="250" y="436" font-size="10" fill="#b91c1c">rake, not straight down (see drop callout below)</text>
+  <line x1="228" y1="290" x2="252" y2="272" stroke="#b91c1c" stroke-width="1" marker-end="url(#arrS)"/>
+  <text x="256" y="286" font-size="10" fill="#b91c1c">ends one riser BELOW the landing top —</text>
+  <text x="256" y="298" font-size="10" fill="#b91c1c">the landing carries its own structure</text>
+
+  <!-- drop callout: nosing line vs. the stringer's actual top edge, perpendicular to the rake -->
+  <line x1="135" y1="320" x2="147" y2="338" stroke="#b91c1c" stroke-width="1.2" marker-start="url(#arrS)" marker-end="url(#arrS)"/>
+  <text x="152" y="336" font-size="10" fill="#b91c1c">STRINGER_DROP (⊥ to rake)</text>
+
+  <!-- flight 1 steps: k=4 risers -> 3 steps -->
+  <rect x="90"  y="350" width="45" height="10" fill="#cbd5e1" stroke="#475569"/>
+  <rect x="135" y="320" width="45" height="10" fill="#cbd5e1" stroke="#475569"/>
+  <rect x="180" y="290" width="45" height="10" fill="#cbd5e1" stroke="#475569"/>
+
+  <!-- landing -->
+  <rect x="225" y="260" width="90" height="10" fill="#fde68a" stroke="#b45309"/>
+
+  <!-- flight 2 steps: k=4 risers -> 3 steps -->
+  <rect x="315" y="230" width="45" height="10" fill="#cbd5e1" stroke="#475569"/>
+  <rect x="360" y="200" width="45" height="10" fill="#cbd5e1" stroke="#475569"/>
+  <rect x="405" y="170" width="45" height="10" fill="#cbd5e1" stroke="#475569"/>
+
+  <!-- riser dimension h -->
+  <line x1="72" y1="380" x2="72" y2="350" stroke="#334155" stroke-width="1.2" marker-start="url(#arr)" marker-end="url(#arr)"/>
+  <text x="26" y="368" font-size="12" fill="#334155">h</text>
+  <text x="8" y="344" font-size="10" fill="#64748b">actual step</text>
+  <text x="8" y="332" font-size="10" fill="#64748b">height</text>
+
+  <!-- tread dimension L -->
+  <line x1="90" y1="404" x2="135" y2="404" stroke="#334155" stroke-width="1.2" marker-start="url(#arr)" marker-end="url(#arr)"/>
+  <text x="98" y="418" font-size="12" fill="#334155">L</text>
+
+  <!-- total height -->
+  <line x1="640" y1="380" x2="640" y2="140" stroke="#334155" stroke-width="1.2" marker-start="url(#arr)" marker-end="url(#arr)"/>
+  <text x="650" y="262" font-size="12" fill="#334155">totalHeight = n × h  (exact)</text>
+  <text x="650" y="280" font-size="11" fill="#64748b">n = round(totalHeight / stepHeight)</text>
+  <text x="650" y="296" font-size="11" fill="#64748b">h = totalHeight / n</text>
+  <text x="650" y="312" font-size="11" fill="#b91c1c">stepHeight is a TARGET; h is what you get</text>
+
+  <!-- landing callout -->
+  <line x1="270" y1="252" x2="300" y2="196" stroke="#b91c1c" stroke-width="1.2" marker-start="url(#arrS)"/>
+  <text x="292" y="188" font-size="12" fill="#b91c1c" font-weight="600">landing = tread of riser 4</text>
+  <text x="292" y="172" font-size="11" fill="#b91c1c">depth = stepWidth (square, derived)</text>
+
+  <!-- flight brackets -->
+  <line x1="90" y1="440" x2="225" y2="440" stroke="#475569" stroke-width="1.2"/>
+  <text x="94" y="456" font-size="11" fill="#475569">flight 1: k=4 risers → 3 steps</text>
+  <line x1="315" y1="440" x2="450" y2="440" stroke="#475569" stroke-width="1.2"/>
+  <text x="319" y="456" font-size="11" fill="#475569">flight 2: k=4 risers → 3 steps</text>
+
+  <text x="40" y="486" font-size="12" fill="#0f172a" font-weight="600">A flight of k risers has only k−1 step pieces — the top riser's tread is the landing (or the upper floor).</text>
+
+  <!-- ================= PANEL B : ORIGINS ================= -->
+  <line x1="40" y1="510" x2="960" y2="510" stroke="#e2e8f0" stroke-width="1"/>
+  <text x="40" y="540" font-size="15" font-weight="700" fill="#0f172a">B · Origin conventions — base mesh modelled at each range's MINIMUM, shapekey 1.0 = MAXIMUM</text>
+
+  <!-- B1 step/landing plan -->
+  <text x="40" y="572" font-size="13" font-weight="600" fill="#0f172a">step · landing — origin at CENTRE of TOP face</text>
+  <rect x="80" y="590" width="220" height="120" fill="#cbd5e1" stroke="#475569"/>
+  <circle cx="190" cy="650" r="5" fill="#b91c1c"/>
+  <line x1="80" y1="650" x2="300" y2="650" stroke="#b91c1c" stroke-width="1.2" marker-start="url(#arrS)" marker-end="url(#arrS)"/>
+  <line x1="190" y1="590" x2="190" y2="710" stroke="#b91c1c" stroke-width="1.2" marker-start="url(#arrS)" marker-end="url(#arrS)"/>
+  <text x="86" y="584" font-size="11" fill="#64748b">plan view (top face)</text>
+  <text x="118" y="642" font-size="11" fill="#b91c1c">width → grows ±X</text>
+  <text x="196" y="606" font-size="11" fill="#b91c1c">length → grows ±Z</text>
+  <text x="80" y="734" font-size="11" fill="#334155">Solver places this origin at the tread's top-centre.</text>
+  <text x="80" y="750" font-size="11" fill="#334155">Thickness extends downward (−Y), fixed — not keyed.</text>
+
+  <!-- B2 stringer -->
+  <text x="380" y="572" font-size="13" font-weight="600" fill="#0f172a">stringer — origin at START (bottom) end</text>
+  <line x1="410" y1="700" x2="590" y2="610" stroke="#94a3b8" stroke-width="16" stroke-linecap="butt"/>
+  <circle cx="410" cy="700" r="5" fill="#b91c1c"/>
+  <line x1="416" y1="712" x2="596" y2="622" stroke="#b91c1c" stroke-width="1.2" marker-end="url(#arrS)"/>
+  <text x="440" y="740" font-size="11" fill="#b91c1c">local +Z — model at exactly 1.0 m; scale.z = length</text>
+  <text x="380" y="756" font-size="11" fill="#334155">Range ~0.31 → 9.40 m. Cross-section fixed. Plain closed board, not sawtooth.</text>
+  <text x="380" y="596" font-size="11" fill="#64748b">One per flight, on the flight centreline — no mirroring.</text>
+
+  <!-- B3 axes + ranges -->
+  <text x="700" y="572" font-size="13" font-weight="600" fill="#0f172a">Shapekey ranges</text>
+  <text x="700" y="596" font-size="12" fill="#334155">step   · width  0.8 → 1.2</text>
+  <text x="700" y="614" font-size="12" fill="#334155">step   · length 0.24 → 0.33</text>
+  <text x="700" y="632" font-size="12" fill="#334155">landing · width  0.8 → 1.2</text>
+  <text x="700" y="650" font-size="12" fill="#334155">landing · length 0.8 → 1.2</text>
+  <text x="700" y="668" font-size="12" fill="#334155">stringer · none (scaled)</text>
+  <text x="700" y="694" font-size="11" fill="#b91c1c">influence = (value − min) / (max − min)</text>
+  <text x="700" y="716" font-size="11" fill="#334155">Each key displaces verts ONLY along its own</text>
+  <text x="700" y="730" font-size="11" fill="#334155">axis, so keys compose additively.</text>
+  <text x="700" y="750" font-size="11" fill="#334155">Names lowercase: width, length. No other keys.</text>
+</svg>

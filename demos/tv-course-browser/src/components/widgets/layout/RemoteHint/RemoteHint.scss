@@ -1,0 +1,50 @@
+.remote-hint {
+	position: fixed;
+	right: 24px;
+	bottom: 24px;
+	z-index: 9000;
+	max-width: min(360px, calc(100vw - 48px));
+	padding: 16px 18px;
+	color: #f5f7fa;
+	background: rgba(12, 18, 26, 0.94);
+	border: 1px solid rgba(245, 247, 250, 0.16);
+	border-radius: 10px;
+	box-shadow: 0 8px 28px rgba(0, 0, 0, 0.45);
+	backdrop-filter: blur(6px);
+}
+
+.remote-hint__title {
+	margin: 0 0 6px;
+	font-size: 15px;
+	font-weight: 600;
+}
+
+.remote-hint__text {
+	margin: 0 0 12px;
+	font-size: 13px;
+	line-height: 1.5;
+	opacity: 0.8;
+}
+
+.remote-hint kbd {
+	display: inline-block;
+	padding: 1px 6px;
+	font-family: inherit;
+	font-size: 12px;
+	background: rgba(245, 247, 250, 0.12);
+	border: 1px solid rgba(245, 247, 250, 0.22);
+	border-radius: 4px;
+}
+
+.remote-hint__close {
+	padding: 7px 14px;
+	font: inherit;
+	font-size: 13px;
+	color: inherit;
+	cursor: pointer;
+	background: transparent;
+	border: 1px solid rgba(245, 247, 250, 0.28);
+	border-radius: 6px;
+}
+
+.remote-hint__close:hover { background: rgba(245, 247, 250, 0.1); }

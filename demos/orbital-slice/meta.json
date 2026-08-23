@@ -1,0 +1,15 @@
+{
+  "slug": "orbital-slice",
+  "title": "Orbital Slice",
+  "tagline": "A swipe is a path, not a point — substepped slicing in Phaser 3.",
+  "tags": [
+    "Phaser 3",
+    "TypeScript",
+    "Sprite atlases",
+    "Particles",
+    "Vite"
+  ],
+  "accent": "#c084fc",
+  "poster": "poster.webp",
+  "posterIsPlaceholder": true
+}

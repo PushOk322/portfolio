@@ -1,0 +1,15 @@
+.exit-app {
+    position: absolute;
+    bottom: 20vw;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 800px;
+    height: 350px;
+    border-radius: 32px;
+    background: grey;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--white);
+    font-size: 32px;
+}
