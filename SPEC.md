@@ -70,10 +70,15 @@ changes, nothing deleted.
 
 ### Why one repo rather than six
 
-Six repositories would mean six deploy pipelines, six dependency-update chores, and
-a version of the site that can disagree with the demo it embeds. One repo means one
-`npm run build`, one CI run, and a commit that moves the site and its demos together.
-The cost is a larger clone, which matters only to CI, and CI caches it.
+To keep the versions of six related projects in one history, and to make a commit
+able to move a demo and the site that embeds it at the same time. Six repositories
+would let the site describe a version of a demo that no longer exists.
+
+**One repo does not mean one pipeline.** The two are independent decisions, and the
+CI here builds each demo in its own job — see §5. Anything you could do with six
+repositories' worth of pipelines, you can do with six jobs in one.
+
+The cost of a monorepo is a larger clone, which matters only to CI, and CI caches it.
 
 Submodules were the obvious alternative and are the wrong tool here: they would keep
 each demo pinned to a *separate* repository, which is exactly the connection to
@@ -159,13 +164,41 @@ That runs `build.mjs`, which:
 
 1. installs dependencies for any demo missing `node_modules` (skip with `npm run build:fast`),
 2. runs `npm run build` in each of the six demos, in series,
-3. copies each demo's `dist/` to `dist/demos/<slug>/`,
-4. builds the site and copies its `dist/` to the root of `dist/`.
+3. builds the site,
+4. assembles `dist/` — site at the root, each demo at `dist/demos/<slug>/`.
 
-Output: **≈72 MB across ≈576 files.** Serve `dist/` at the domain root.
+Output: **≈72 MB across ≈577 files.** Serve `dist/` at the domain root.
 
 ```bash
 npm run preview     # http://127.0.0.1:8080
+```
+
+### `build.mjs` is a coordinator, not a monolith
+
+It does not know how any demo builds. It runs `npm run build` in the folder and
+copies whatever `dist/` comes out — which is why one demo can be webpack, one
+esbuild, one a plain file copy, and adding a seventh needs no change to it.
+
+That also means the pieces can be driven independently, which is exactly what CI does:
+
+| Command | Does |
+|---|---|
+| `node build.mjs` | everything, in series — the local default |
+| `node build.mjs --only=<slug>` | one demo, into `demos/<slug>/dist` |
+| `node build.mjs --site-only` | site + assemble, expecting the demos already built |
+| `node build.mjs --list` | the demo slugs, one per line |
+| `--no-install` | skip `npm install` when dependencies are already present |
+
+CI calls `--only=<slug>` once per demo in parallel, then `--site-only` to assemble.
+Locally, no arguments does the same work in series. **Same entry point either way**,
+so a green CI run and a green local build mean the same thing.
+
+`--site-only` fails loudly if any demo's `dist/` is missing rather than assembling a
+site with a hole in it:
+
+```
+✖ no dist/ for: canvas-studio
+  Build them first, or drop --site-only.
 ```
 
 **Node 24.** Pinned in `.nvmrc` at the root and in every demo. No demo needs a
@@ -237,71 +270,77 @@ Do **not** add a restrictive `Content-Security-Policy` without testing: three de
 create blob URLs for AR export and texture decoding, and a `default-src 'self'`
 policy without `blob:` breaks them silently.
 
-## 5. GitHub Actions
+## 5. GitHub Actions — six pipelines and a coordinator
 
-`.github/workflows/deploy.yml` — builds on push to `main` and deploys to Cloudflare
-Pages. Requires two repository secrets (see `ACTIONS_FOR_PASHA.md` items 6–7).
+`.github/workflows/deploy.yml`. Requires two repository secrets (see
+`ACTIONS_FOR_PASHA.md` items 4–5).
 
-```yaml
-name: Build and deploy
+**The repo is shared; the pipelines are not.** Each demo builds in its own job, with
+its own dependency cache, its own log, and its own pass/fail. A broken webpack config
+in the TV app does not stop the other five from building, and it shows up as one red
+leg rather than a stack trace buried in a combined log.
 
-on:
-  push:
-    branches: [main]
-  workflow_dispatch:
-
-# One deploy at a time. Two overlapping runs can publish out of order and leave the
-# older build live.
-concurrency:
-  group: pages-deploy
-  cancel-in-progress: true
-
-jobs:
-  deploy:
-    runs-on: ubuntu-latest
-    permissions:
-      contents: read
-      deployments: write
-
-    steps:
-      - uses: actions/checkout@v4
-
-      - uses: actions/setup-node@v4
-        with:
-          node-version-file: .nvmrc
-
-      # No root lockfile — each demo installs its own. Cache by the hash of every
-      # demo lockfile so a change in one demo does not invalidate the rest.
-      - uses: actions/cache@v4
-        with:
-          path: |
-            ~/.npm
-            demos/*/node_modules
-            site/node_modules
-          key: deps-${{ runner.os }}-${{ hashFiles('demos/*/package-lock.json', 'site/package-lock.json') }}
-          restore-keys: deps-${{ runner.os }}-
-
-      - name: Build everything
-        run: npm run build
-
-      - name: Check the build actually produced something
-        run: |
-          test -f dist/index.html
-          for slug in $(ls demos | grep -v _shared); do
-            test -f "dist/demos/$slug/index.html" || { echo "missing demo: $slug"; exit 1; }
-          done
-          echo "dist/ = $(du -sh dist | cut -f1) across $(find dist -type f | wc -l) files"
-
-      - uses: cloudflare/wrangler-action@v3
-        with:
-          apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
-          accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
-          command: pages deploy dist --project-name=portfolio --branch=main
+```
+discover ──┬─► demo (joinery-configurator) ──┐
+           ├─► demo (stairs-generator)     ──┤
+           ├─► demo (boat-configurator)    ──┤
+           ├─► demo (orbital-slice)        ──┼─► assemble ─► verify ─► deploy
+           ├─► demo (canvas-studio)        ──┤
+           └─► demo (tv-course-browser)    ──┘
 ```
 
-The verification step is not ceremony. Every demo build can succeed while producing
-an empty `dist/` if a path assumption breaks, and a green deploy of an empty site is
-worse than a red build.
+### `discover`
+
+Runs `node build.mjs --list` and feeds the result into the matrix. **The demo list
+lives in `demos/`, not in the workflow** — adding a seventh demo needs no CI edit.
+
+### `demo` — one job per demo, in parallel
+
+- **`fail-fast: false`.** If two demos are broken, one run should tell you about both
+  rather than making you fix and re-push to discover the second.
+- **Dependency cache keyed per demo.** A dependency change in the boat configurator
+  must not invalidate the game's cache.
+- **Build cache keyed on that demo's own files** — `hashFiles('demos/<slug>/**')`. If
+  nothing in the folder changed, the job restores the previous `dist/` and skips the
+  build entirely. Most pushes touch one demo, so the other five finish in seconds.
+- Each job asserts its own `dist/index.html` exists before uploading, so a demo that
+  builds "successfully" into nothing fails at its own leg rather than at the deploy.
+
+Every leg runs `node build.mjs --only=<slug>` — the same entry point you use locally.
+
+### `assemble` — the coordinator
+
+Downloads the six artefacts, puts each back at `demos/<slug>/dist` (exactly where a
+local build leaves it), builds the site around them, and assembles `dist/`.
+
+Then it verifies before deploying:
+
+```bash
+test -f dist/index.html
+for slug in $(node build.mjs --list); do
+  test -f "dist/demos/$slug/index.html" || exit 1
+done
+```
+
+That is not ceremony. A demo build can succeed and still emit an empty `dist/` if a
+path assumption breaks, and **a green deploy of an empty site is worse than a red
+build** — you find out from a recruiter rather than from CI.
+
+### Pull requests build but never publish
+
+The workflow runs on `pull_request` too, so a branch gets the full six-way build and
+the verification, with the deploy step gated on
+`github.event_name == 'push' && github.ref == 'refs/heads/main'`.
+
+### Adding a seventh demo
+
+1. Drop the folder in `demos/<slug>/` with a `package.json` whose `build` script
+   produces `dist/`, plus `meta.json`, `CASE_STUDY.md` and `poster.webp`.
+2. Add the slug to `ORDER` in `site/scripts/build-pages.mjs` to place it on the page.
+
+No workflow change, no `build.mjs` change. The build warns about any demo on disk
+that is not in `ORDER`, and skips it — which is also the one-line way to pull a demo
+off the site without deleting it.
 
 ## 6. DNS
 
@@ -366,7 +405,8 @@ hard limit. Two real differences: bandwidth is a 100 GB/month soft limit rather 
 unlimited, and there is no instant rollback, so recovering means pushing a revert and
 waiting for a rebuild.
 
-Swap the last step of the workflow:
+Only the `assemble` job changes — the six `demo` jobs are untouched, because they
+produce artefacts rather than deploying anything. Replace its Cloudflare step with:
 
 ```yaml
       - uses: actions/upload-pages-artifact@v3
@@ -375,9 +415,12 @@ Swap the last step of the workflow:
       - uses: actions/deploy-pages@v4
 ```
 
-and add `pages: write` and `id-token: write` to `permissions`. DNS becomes four A
-records at the apex (`185.199.108-111.153`) plus a `www` CNAME to
-`<username>.github.io`.
+and add `pages: write` and `id-token: write` to that job's `permissions`. DNS becomes
+four A records at the apex (`185.199.108`, `.109`, `.110`, `.111` — all `.153`) plus a
+`www` CNAME to `<username>.github.io`.
+
+That the hosting swap touches one job and nothing else is the point of separating the
+builds from the deploy.
 
 ## 9. Alternative: your own DigitalOcean droplet
 

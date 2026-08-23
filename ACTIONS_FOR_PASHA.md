@@ -78,6 +78,9 @@ GitHub repo → Settings → Secrets and variables → Actions → New repositor
 
 Names must match exactly — `.github/workflows/deploy.yml` reads them by name.
 
+Only the `assemble` job uses them. The six demo build jobs need no secrets, so a
+pull request from a fork still builds and verifies without any access to yours.
+
 ### 6. CREATE THE PAGES PROJECT — free · 5 min
 
 Cloudflare dashboard → Workers & Pages → Create → Pages → **Connect to Git** → pick

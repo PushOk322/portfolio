@@ -1,18 +1,105 @@
 name: Build and deploy
 
+# Six independent demo builds, then one job that assembles and ships.
+#
+# The repo is shared; the pipelines are not. Each demo builds in its own job, with
+# its own dependency cache, its own log, and its own pass/fail. A broken webpack
+# config in the TV app does not stop the other five from building, and its failure
+# shows up as one red leg rather than a stack trace buried in a combined log.
+#
+# The `assemble` job is the coordinator: it collects the six built artefacts, builds
+# the index site around them, checks the result is actually a site, and deploys.
+
 on:
   push:
     branches: [main]
+  pull_request:
   workflow_dispatch:
 
-# One deploy at a time. Two overlapping runs can publish out of order and leave the
-# older build live.
 concurrency:
-  group: pages-deploy
+  group: deploy-${{ github.ref }}
   cancel-in-progress: true
 
 jobs:
-  deploy:
+  # The demo list lives in demos/, not in this file — adding a seventh demo should
+  # not require editing CI.
+  discover:
+    runs-on: ubuntu-latest
+    outputs:
+      slugs: ${{ steps.list.outputs.slugs }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version-file: .nvmrc
+      - id: list
+        run: |
+          slugs=$(node build.mjs --list | jq -R -s -c 'split("\n") | map(select(length > 0))')
+          echo "slugs=$slugs" >> "$GITHUB_OUTPUT"
+          echo "Demos: $slugs"
+
+  demo:
+    needs: discover
+    runs-on: ubuntu-latest
+    strategy:
+      # Never cancel the others. If two demos are broken, one run should tell you
+      # about both rather than making you fix and re-push to discover the second.
+      fail-fast: false
+      matrix:
+        slug: ${{ fromJSON(needs.discover.outputs.slugs) }}
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version-file: .nvmrc
+
+      # Scoped to this demo. A dependency change in the boat configurator must not
+      # invalidate the game's cache.
+      - name: Cache dependencies
+        uses: actions/cache@v4
+        with:
+          path: |
+            ~/.npm
+            demos/${{ matrix.slug }}/node_modules
+          key: deps-${{ runner.os }}-${{ matrix.slug }}-${{ hashFiles(format('demos/{0}/package-lock.json', matrix.slug)) }}
+          restore-keys: deps-${{ runner.os }}-${{ matrix.slug }}-
+
+      # Skip the build entirely when nothing in this demo changed. The key covers this
+      # demo's own files only, so a change to the site or another demo restores this
+      # one straight from cache. Most pushes touch one demo; this makes the other five
+      # near-instant.
+      - name: Restore previous build
+        id: built
+        uses: actions/cache@v4
+        with:
+          path: demos/${{ matrix.slug }}/dist
+          key: dist-${{ runner.os }}-${{ matrix.slug }}-${{ hashFiles(format('demos/{0}/**', matrix.slug)) }}
+
+      - name: Build
+        if: steps.built.outputs.cache-hit != 'true'
+        run: node build.mjs --only=${{ matrix.slug }}
+
+      - name: Reuse cached build
+        if: steps.built.outputs.cache-hit == 'true'
+        run: echo "No changes in demos/${{ matrix.slug }} — reusing the cached dist/."
+
+      - name: Check the demo produced something loadable
+        run: |
+          test -f "demos/${{ matrix.slug }}/dist/index.html" \
+            || { echo "::error::demos/${{ matrix.slug }}/dist/index.html is missing"; exit 1; }
+          echo "$(du -sh demos/${{ matrix.slug }}/dist | cut -f1) across $(find demos/${{ matrix.slug }}/dist -type f | wc -l) files"
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: demo-${{ matrix.slug }}
+          path: demos/${{ matrix.slug }}/dist
+          retention-days: 7
+          if-no-files-found: error
+
+  assemble:
+    needs: [discover, demo]
     runs-on: ubuntu-latest
     permissions:
       contents: read
@@ -25,31 +112,49 @@ jobs:
         with:
           node-version-file: .nvmrc
 
-      # There is no root lockfile — each demo installs its own. Cache on the hash of
-      # every demo lockfile so a change in one demo does not invalidate the rest.
-      - uses: actions/cache@v4
+      # Each artefact lands back where its demo's own build would have put it, so
+      # `--site-only` finds them exactly where the local build does.
+      - uses: actions/download-artifact@v4
+        with:
+          pattern: demo-*
+          path: /tmp/demo-artifacts
+
+      - name: Place the built demos
+        run: |
+          for dir in /tmp/demo-artifacts/demo-*; do
+            slug="$(basename "$dir" | sed 's/^demo-//')"
+            mkdir -p "demos/$slug"
+            cp -r "$dir" "demos/$slug/dist"
+            echo "restored demos/$slug/dist"
+          done
+
+      - name: Cache site dependencies
+        uses: actions/cache@v4
         with:
           path: |
             ~/.npm
-            demos/*/node_modules
             site/node_modules
-          key: deps-${{ runner.os }}-${{ hashFiles('demos/*/package-lock.json', 'site/package-lock.json') }}
-          restore-keys: deps-${{ runner.os }}-
+          key: deps-${{ runner.os }}-site-${{ hashFiles('site/package-lock.json') }}
+          restore-keys: deps-${{ runner.os }}-site-
 
-      - name: Build everything
-        run: npm run build
+      - name: Build the site and assemble dist/
+        run: node build.mjs --site-only
 
-      # Every demo build can succeed while producing an empty dist/ if a path
-      # assumption breaks. A green deploy of an empty site is worse than a red build.
-      - name: Verify the build produced a site
+      # A demo build can succeed and still emit an empty dist/ if a path assumption
+      # breaks. A green deploy of an empty site is worse than a red build.
+      - name: Verify the deploy
         run: |
-          test -f dist/index.html
-          for slug in $(ls demos | grep -v _shared); do
-            test -f "dist/demos/$slug/index.html" || { echo "missing demo: $slug"; exit 1; }
+          test -f dist/index.html || { echo "::error::dist/index.html missing"; exit 1; }
+          for slug in $(node build.mjs --list); do
+            test -f "dist/demos/$slug/index.html" \
+              || { echo "::error::dist/demos/$slug/index.html missing"; exit 1; }
           done
           echo "dist/ = $(du -sh dist | cut -f1) across $(find dist -type f | wc -l) files"
 
-      - uses: cloudflare/wrangler-action@v3
+      # Pull requests build and verify but never publish.
+      - name: Deploy to Cloudflare Pages
+        if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+        uses: cloudflare/wrangler-action@v3
         with:
           apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
           accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
