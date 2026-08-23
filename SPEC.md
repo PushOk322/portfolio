@@ -13,6 +13,9 @@ PORTFOLIO/
   build.mjs              whole-portfolio build → dist/
   package.json           npm run build
   .nvmrc                 24
+  .gitattributes         line-ending and binary rules (see §2)
+  .gitignore             node_modules, build output, generated pages, secrets
+  .github/workflows/     deploy.yml — build and deploy on push to main
   SPEC.md                this file
   ACTIONS_FOR_PASHA.md   the numbered list of things only you can do
   POSTERS.md             how to replace the six placeholder screenshots
@@ -38,7 +41,114 @@ Each demo is independent: its own `package.json`, its own dependencies, its own
 imports anything from the site, and the site reads from the demos rather than
 duplicating their content.
 
-## 2. Build
+## 2. Version control — one repo, no inherited history
+
+This folder is a **single git repository**, already initialised and committed
+locally. The six demos are ordinary directories inside it, not submodules and not
+subtrees.
+
+```
+commit 6b45bef  main   923 files   .git = 51 MB
+remote origin   github-personal:PushOk322/portfolio.git   (never pushed)
+```
+
+### Nothing from the originals came with them
+
+Every demo was copied with `tar --exclude=.git`, so **no demo carries a `.git`
+directory, a remote, a branch or a single commit from its source project.** A
+full-depth scan confirms it. That matters for three reasons:
+
+- Nothing here can accidentally push to a client's Bitbucket or GitHub.
+- No client's commit history, author list or internal branch names travel into a
+  public repository.
+- The two originals that have a `.env` committed to their remote
+  (`react_alba`, `Quity-Strapi`) cannot leak through this repo, because none of
+  their history exists here.
+
+The originals in `MY_DEMOS` are untouched — same HEADs, no commits, no staged
+changes, nothing deleted.
+
+### Why one repo rather than six
+
+Six repositories would mean six deploy pipelines, six dependency-update chores, and
+a version of the site that can disagree with the demo it embeds. One repo means one
+`npm run build`, one CI run, and a commit that moves the site and its demos together.
+The cost is a larger clone, which matters only to CI, and CI caches it.
+
+Submodules were the obvious alternative and are the wrong tool here: they would keep
+each demo pinned to a *separate* repository, which is exactly the connection to
+commercial remotes this is meant to sever.
+
+### Identity
+
+The commit is authored as `tishkovets.pavlo@gmail.com`, set **locally in this repo**.
+Your global git identity is `pt@marevo.vision`, and without the override every commit
+in your personal portfolio would carry your employer's domain — and would not match
+your personal GitHub account, so the contributions would not show on your profile.
+
+```bash
+git config user.email        # tishkovets.pavlo@gmail.com — repo-local
+git config --global user.email   # pt@marevo.vision — unchanged
+```
+
+### Binary assets are in git, deliberately
+
+79 MB of working tree, of which most is geometry, audio and textures. The largest
+single file is `door_demo.glb` at 14.3 MB — comfortably under GitHub's 100 MB
+per-file hard limit, and the repo is far under the 1 GB soft limit.
+
+**Git LFS was considered and rejected.** LFS on the free tier caps at 1 GB of storage
+*and* 1 GB of bandwidth per month, and CI clones this repo on every deploy — so LFS
+would introduce a quota that plain git does not have. Binaries in git are only
+expensive when they change often, and these models change roughly never.
+
+**The tripwire:** if you start iterating on the 3D models and the repo passes ~500 MB,
+revisit. At that point the answer is probably to host models on the CDN and fetch them
+by URL, not to add LFS.
+
+### `.gitattributes`
+
+`* text=auto eol=lf` normalises line endings on commit. This is not tidiness: during
+development a CRLF markdown file silently broke the case-study renderer, because
+splitting on `/\n{2,}/` never matches `\r\n\r\n`. Two case studies rendered as one
+unstyled paragraph and nothing errored. One rule prevents the whole class of it.
+
+Binary extensions are marked `binary` so git never tries to diff or merge them.
+`demos/*/js/libs/**` is marked `linguist-vendored` so GitHub's language bar reports
+what you wrote rather than what three.js ships.
+
+### `.gitignore`
+
+Excludes `node_modules/`, all build output (`dist/`, `dist-embed/`), the site's seven
+generated HTML pages, and — belt and braces — `.env`, `*.pem`, `*.key`. No demo has a
+secret to protect; the rule is there so that if one ever appears it does not get
+committed by reflex.
+
+### First push
+
+The remote is set. The repository does not exist on GitHub yet — creating it needs
+your account, so it is item 3 in `ACTIONS_FOR_PASHA.md`. Once it exists:
+
+```bash
+cd E:/Work/Personal/PORTFOLIO
+git push -u origin main
+```
+
+`github-personal` resolves through your `~/.ssh/config` to `github.com` using
+`id_ed25519`, which keeps this off the `github-work` key entirely.
+
+### Day-to-day
+
+```bash
+git add -A && git commit -m "..."     # then push; CI builds and deploys on main
+npm run build:fast                    # rebuild locally without reinstalling
+```
+
+Branch if you want, but `main` is what deploys — the workflow triggers on push to
+`main` only.
+
+---
+## 3. Build
 
 ```bash
 cd E:/Work/Personal/PORTFOLIO
@@ -76,7 +186,7 @@ Two demos deliberately do not use Vite (`joinery-configurator`, `stairs-generato
 Both resolve `three` through a native importmap with no bundling, and both make a
 point of having no CDN dependency. Reasoning is in each demo's `CHANGES.md`.
 
-## 3. Hosting — Cloudflare Pages (recommended)
+## 4. Hosting — Cloudflare Pages (recommended)
 
 Sizes to check against the limits:
 
@@ -127,7 +237,7 @@ Do **not** add a restrictive `Content-Security-Policy` without testing: three de
 create blob URLs for AR export and texture decoding, and a `default-src 'self'`
 policy without `blob:` breaks them silently.
 
-## 4. GitHub Actions
+## 5. GitHub Actions
 
 `.github/workflows/deploy.yml` — builds on push to `main` and deploys to Cloudflare
 Pages. Requires two repository secrets (see `ACTIONS_FOR_PASHA.md` items 6–7).
@@ -193,7 +303,7 @@ The verification step is not ceremony. Every demo build can succeed while produc
 an empty `dist/` if a path assumption breaks, and a green deploy of an empty site is
 worse than a red build.
 
-## 5. DNS
+## 6. DNS
 
 Assuming `pavlotyshkovets.dev` and Cloudflare as both registrar and DNS host, adding
 the custom domain in the Pages project creates these automatically. Verify they exist:
@@ -223,7 +333,7 @@ origin: 'https://pavlotyshkovets.dev'   // currently 'https://example.invalid'
 That value fills `og:url`, `og:image` and `<link rel="canonical">`. Left as-is, link
 previews on LinkedIn and Slack will not resolve an image.
 
-## 6. Rollback
+## 7. Rollback
 
 **Fastest — Cloudflare dashboard.** Workers & Pages → your project → Deployments →
 find the last good one → **Rollback to this deployment**. It is instant, because
@@ -249,7 +359,7 @@ the `ORDER` array in `site/scripts/build-pages.mjs` and push. The build warns ab
 demos on disk that are not in `ORDER`, and skips them. The demo folder stays in the
 repo; it just does not appear on the site.
 
-## 7. Alternative: GitHub Pages
+## 8. Alternative: GitHub Pages
 
 Workable — 72 MB against a 1 GB soft limit, largest file 14.3 MB against a 100 MB
 hard limit. Two real differences: bandwidth is a 100 GB/month soft limit rather than
@@ -269,7 +379,7 @@ and add `pages: write` and `id-token: write` to `permissions`. DNS becomes four 
 records at the apex (`185.199.108-111.153`) plus a `www` CNAME to
 `<username>.github.io`.
 
-## 8. Alternative: your own DigitalOcean droplet
+## 9. Alternative: your own DigitalOcean droplet
 
 You already run nginx and rsync, so this is the least new machinery — at the cost of
 being the person who gets paged.
@@ -331,7 +441,7 @@ Rollback here is keeping the previous `dist/` beside the live one and swapping a
 symlink — deploy to `/var/www/portfolio-<timestamp>/`, then
 `ln -sfn` the `current` symlink and reload nginx.
 
-## 9. Measured state at handover
+## 10. Measured state at handover
 
 | | |
 |---|---|
