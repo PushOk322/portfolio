@@ -738,3 +738,136 @@ a {
 		grid-template-columns: repeat(2, minmax(0, 1fr));
 	}
 }
+
+/* --- Project marks -------------------------------------------------------- */
+/* One line drawing per project, taken from its poster. They are the only figurative
+   element on the site, so they stay small, unfilled, and the same weight everywhere —
+   the moment one is bigger or bolder than the others they stop reading as a set. */
+
+.study__mark,
+.demo-head__mark,
+.marks__item {
+	display: block;
+	margin: 0;
+	color: var(--signal);
+}
+
+.study__mark svg,
+.demo-head__mark svg,
+.marks__item svg {
+	display: block;
+	width: 100%;
+	height: 100%;
+}
+
+/* Section divider inside a case study. Centred and generously spaced, because its job
+   is to give the eye somewhere to rest between two ideas. */
+.study__mark {
+	width: 30px;
+	height: 30px;
+	margin: 46px auto 34px;
+	opacity: 0.65;
+}
+
+/* Beside the demo title. */
+.demo-head__mark {
+	width: 34px;
+	height: 34px;
+	margin-bottom: 16px;
+}
+
+.marks {
+	display: flex;
+	flex-wrap: wrap;
+	gap: 14px;
+	margin: 18px 0 0;
+	padding: 0;
+	list-style: none;
+}
+
+.marks__item {
+	width: 26px;
+	height: 26px;
+	color: var(--ink-dim);
+	transition: color 0.2s ease;
+}
+
+.marks__item:hover { color: var(--signal); }
+
+/* The first h2 in an article follows the intro, which already has spacing of its own. */
+.study h2:first-of-type { margin-top: 34px; }
+
+@media (max-width: 560px) {
+	.study__mark { margin: 36px auto 26px; }
+}
+
+/* --- Also shipped --------------------------------------------------------- */
+/* Deliberately a quieter tier than the demos above: no poster, no spec block, no
+   button. These are claims rather than evidence, so they should not compete with the
+   six things a visitor can actually open. What they do carry is a commit share — an
+   unverifiable claim with a number attached is at least a checkable one. */
+
+.also {
+	padding: 0 0 clamp(56px, 9vw, 104px);
+}
+
+.also__intro {
+	max-width: 62ch;
+	margin: 26px 0 0;
+	color: var(--ink-mid);
+}
+
+.also__list {
+	display: grid;
+	grid-template-columns: repeat(auto-fill, minmax(290px, 1fr));
+	gap: 1px;
+	margin: 30px 0 0;
+	padding: 0;
+	list-style: none;
+	background: var(--line);
+	border: 1px solid var(--line);
+	border-radius: 3px;
+	overflow: hidden;
+}
+
+.also__item {
+	display: flex;
+	flex-direction: column;
+	padding: 22px 20px 24px;
+	background: var(--ground);
+}
+
+.also__title {
+	margin: 0;
+	font-family: var(--mono);
+	font-size: 15px;
+	font-weight: 500;
+	letter-spacing: -0.005em;
+}
+
+.also__kind {
+	margin: 5px 0 0;
+	font-family: var(--mono);
+	font-size: 11px;
+	letter-spacing: 0.05em;
+	color: var(--ink-dim);
+}
+
+.also__blurb {
+	margin: 13px 0 0;
+	font-size: 14.5px;
+	line-height: 1.6;
+	color: var(--ink-mid);
+}
+
+/* Tag chips inherit from .tags; this variant just steps them back so a card of four
+   does not out-shout the demo entries above. */
+.tags--quiet {
+	margin-top: 16px;
+}
+
+.tags--quiet li {
+	padding: 3px 7px;
+	font-size: 10.5px;
+	color: var(--ink-dim);
+}

@@ -18,7 +18,10 @@ PORTFOLIO/
   .github/workflows/     deploy.yml — build and deploy on push to main
   SPEC.md                this file
   ACTIONS_FOR_PASHA.md   the numbered list of things only you can do
+  ADDING_PROJECTS.md     how to add a demo, or just a mention
   POSTERS.md             how to replace the six placeholder screenshots
+
+  mentions/mentions.json work that is real but not demoable — one object each
 
   site/                  the index site (Vite, no runtime JS)
     scripts/build-pages.mjs    generates the 7 HTML pages from demos/*/meta.json + CASE_STUDY.md
@@ -33,6 +36,7 @@ PORTFOLIO/
       DEMO_NOTICE.md     the modified-build notice
       meta.json          title, tagline, tags, poster
       poster.webp        1600×900 card image
+      icon.svg           the project's geometry mark
       package.json       npm run build → dist/
 ```
 

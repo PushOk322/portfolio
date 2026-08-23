@@ -17,6 +17,7 @@ import { fileURLToPath } from 'node:url';
 
 const SITE = resolve(dirname(fileURLToPath(import.meta.url)), '..');
 const DEMOS = resolve(SITE, '..', 'demos');
+const MENTIONS = resolve(SITE, '..', 'mentions', 'mentions.json');
 
 /* The stylesheet is inlined into every page rather than linked.
    It is ~9.4 kB, 2.6 kB once the host gzips, and as a separate file it was the only
@@ -71,7 +72,7 @@ const esc = (s) =>
  * a parser, because the input is six files I wrote and the subset is closed — a
  * general parser would be more code to audit, not less.
  */
-function renderMarkdown(md) {
+function renderMarkdown(md, mark = '') {
 	// Normalise line endings first. Splitting on /\n{2,}/ silently fails on CRLF — the
 	// blank line between blocks is \r\n\r\n, which contains no two adjacent \n — so a
 	// CRLF file collapses into a single block and renders as one unstyled paragraph.
@@ -98,6 +99,12 @@ function renderMarkdown(md) {
 		const heading = text.match(/^(#{1,3})\s+(.*)$/s);
 		if (heading) {
 			const level = heading[1].length;
+			// The project's own mark separates the sections. A rule would do the same job
+			// and say nothing; this one is drawn from the thing the page is about, and it
+			// is the only ornament in the article.
+			if (level === 2 && mark && out.some((b) => b.startsWith('<h2'))) {
+				out.push(`<p class="study__mark" aria-hidden="true">${mark}</p>`);
+			}
 			out.push(`<h${level}>${inline(heading[2].trim())}</h${level}>`);
 			continue;
 		}
@@ -218,7 +225,19 @@ function entry(demo, index) {
       </li>`;
 }
 
-function indexPage(demos) {
+/* Work that is real but not demoable — behind a login, on a client's domain, or
+   inseparable from a backend. A line each, with the commit share, because an
+   unverifiable claim with a number attached is at least a checkable one. */
+function mention(m) {
+	return `          <li class="also__item">
+            <h3 class="also__title">${esc(m.title)}</h3>
+            <p class="also__kind">${esc(m.kind)} · ${esc(m.commits)} commits mine</p>
+            <p class="also__blurb">${esc(m.blurb)}</p>
+            <ul class="tags tags--quiet">${m.tech.map((t) => `<li>${esc(t)}</li>`).join('')}</ul>
+          </li>`;
+}
+
+function indexPage(demos, mentions) {
 	const description =
 		'Live, interactive demos from a frontend developer specialising in real-time 3D product configurators. Three.js, React and TypeScript.';
 
@@ -264,11 +283,30 @@ ${demos.map(entry).join('\n')}
       </div>
     </section>
 
+    <section class="also" aria-labelledby="also-heading">
+      <div class="shell">
+        ${dim(`Also shipped · ${mentions.length} projects`)}
+        <h2 id="also-heading" class="visually-hidden">Also shipped</h2>
+        <p class="also__intro">
+          Not demoable here — most are behind a login, a client's domain, or a backend I
+          cannot take with me. Listed because the work is real.
+        </p>
+        <ul class="also__list">
+${mentions.map(mention).join('\n')}
+        </ul>
+      </div>
+    </section>
+
     <section class="about" aria-labelledby="about-heading">
       <div class="shell">
         ${dim('About')}
         <div class="about__grid">
-          <h2 id="about-heading" class="about__label">Pavlo Tyshkovets</h2>
+          <div>
+            <h2 id="about-heading" class="about__label">Pavlo Tyshkovets</h2>
+            <ul class="marks" aria-hidden="true">
+${demos.map((d) => `              <li class="marks__item" title="${esc(d.title)}">${d.mark}</li>`).join('\n')}
+            </ul>
+          </div>
           <div class="about__body">
             <p>
               I'm a frontend developer with three and a half years of commercial
@@ -300,7 +338,7 @@ ${demos.map(entry).join('\n')}
 `;
 }
 
-function demoPage(demo, studyHtml) {
+function demoPage(demo, studyHtml, mark) {
 	const m = MEASURED[demo.slug];
 
 	return `<!DOCTYPE html>
@@ -321,6 +359,7 @@ ${head({
       <a class="back" href="/"><span aria-hidden="true">←</span> All work</a>
 
       <header class="demo-head">
+        <p class="demo-head__mark" aria-hidden="true">${mark}</p>
         <h1 class="demo-head__title">${esc(demo.title)}</h1>
         <p class="demo-head__tagline">${esc(demo.tagline)}</p>
       </header>
@@ -361,17 +400,32 @@ for (const slug of ORDER) {
 		continue;
 	}
 	const meta = JSON.parse(await readFile(join(DEMOS, slug, 'meta.json'), 'utf8'));
+	// The project's geometry mark, inlined rather than linked so it inherits colour
+	// from whatever it sits in.
+	meta.mark = await readFile(join(DEMOS, slug, 'icon.svg'), 'utf8');
 	demos.push(meta);
 }
 
 const missing = folders.filter((f) => !ORDER.includes(f));
 if (missing.length) console.warn(`  ! not in ORDER, so not on the site: ${missing.join(', ')}`);
 
-await writeFile(join(SITE, 'index.html'), indexPage(demos), 'utf8');
+// Optional: a missing or empty mentions file simply means the section is not rendered.
+let mentions = [];
+try {
+	mentions = JSON.parse(await readFile(MENTIONS, 'utf8'));
+} catch {
+	console.warn('  ! mentions/mentions.json missing or unreadable — section skipped');
+}
+
+await writeFile(join(SITE, 'index.html'), indexPage(demos, mentions), 'utf8');
 console.log('  index.html');
 
 for (const demo of demos) {
 	const md = await readFile(join(DEMOS, demo.slug, 'CASE_STUDY.md'), 'utf8');
-	await writeFile(join(SITE, `${demo.slug}.html`), demoPage(demo, renderMarkdown(md)), 'utf8');
+	await writeFile(
+		join(SITE, `${demo.slug}.html`),
+		demoPage(demo, renderMarkdown(md, demo.mark), demo.mark),
+		'utf8'
+	);
 	console.log(`  ${demo.slug}.html`);
 }

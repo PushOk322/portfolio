@@ -1,0 +1,72 @@
+[
+  {
+    "title": "Pergola Configurator",
+    "kind": "Commercial · Marevo Vision",
+    "blurb": "Production 3D configurator sold through a real storefront, embedded into Shopify, Wix and Webflow. Physics, generated PDF quotes, and the whole configuration compressed into a shareable URL.",
+    "tech": ["Three.js", "cannon-es", "webpack", "pdf-lib"],
+    "commits": "52 of 71"
+  },
+  {
+    "title": "Bath Configurator",
+    "kind": "Commercial · Marevo Vision",
+    "blurb": "Bathroom configurator with fixtures, finishes, lighting and AR. Carries the compression work I cite everywhere else: 32.8 MB down to 6.75 MB with WebP textures and Draco geometry.",
+    "tech": ["Three.js", "WebXR", "Draco", "node:test"],
+    "commits": "27 of 27"
+  },
+  {
+    "title": "Modular House Viewer",
+    "kind": "Commercial · Marevo Vision",
+    "blurb": "Exterior and interior configurator for a prefab house, with AR placement at real-world scale. Place a building in your garden through a phone camera.",
+    "tech": ["Three.js", "WebXR", "Draco"],
+    "commits": "10 of 10"
+  },
+  {
+    "title": "Camper Trailer Configurator",
+    "kind": "Commercial · Marevo Vision",
+    "blurb": "Finishes and fittings for a steel camper, with a QR hand-off from desktop to phone for AR. Nice material work — sheen and transmission on the glazing.",
+    "tech": ["Three.js", "WebXR", "QR"],
+    "commits": "5 of 5"
+  },
+  {
+    "title": "TRON Energy Rental — Mini App",
+    "kind": "Commercial · Avada Media",
+    "blurb": "Telegram Mini App front end for a crypto energy-rental service: accounts, hourly rent, order packages, top-ups and QR payment codes, in six languages.",
+    "tech": ["React", "Redux Toolkit", "framer-motion", "i18next"],
+    "commits": "829 of 830"
+  },
+  {
+    "title": "TRON Energy Rental — Admin",
+    "kind": "Commercial · Avada Media",
+    "blurb": "The operator side of the same service: client management, rent orders, e-cash top-ups, referrals and mailing. The most modern stack I have shipped.",
+    "tech": ["React 19", "TypeScript", "TanStack Query", "TanStack Table"],
+    "commits": "44 of 100"
+  },
+  {
+    "title": "Laptop Parts Storefront",
+    "kind": "Commercial · Avada Media",
+    "blurb": "Server-rendered e-commerce: catalogue, filters, product pages, basket, checkout, favourites and warranty flows, on a Strapi backend.",
+    "tech": ["Next.js", "TypeScript", "Redux Toolkit", "Strapi"],
+    "commits": "135 of 331"
+  },
+  {
+    "title": "Appliance Storefront",
+    "kind": "Commercial · Avada Media",
+    "blurb": "Multilingual storefront with Nova Poshta delivery integration, product comments and a filtered catalogue, built on RTK Query.",
+    "tech": ["Next.js", "TypeScript", "RTK Query", "next-intl"],
+    "commits": "144 of 423"
+  },
+  {
+    "title": "Sports Community App",
+    "kind": "Commercial",
+    "blurb": "Posts, likes, replies and charts over a Strapi backend, with the user flow designed alongside the build.",
+    "tech": ["React", "Ant Design", "Recharts", "Strapi"],
+    "commits": "34 of 34"
+  },
+  {
+    "title": "Investment Firm Site",
+    "kind": "Commercial · Avada Media",
+    "blurb": "Marketing site for a financial services firm: department pages, video modals, sliders and progress meters, built to a Figma spec.",
+    "tech": ["React", "TypeScript", "webpack", "Storybook"],
+    "commits": "33 of 93"
+  }
+]

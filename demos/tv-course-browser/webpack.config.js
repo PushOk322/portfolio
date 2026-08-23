@@ -191,26 +191,22 @@ module.exports = {
 				],
 				type: devMode ? 'asset' : 'asset/resource'
 			},
+			// Video only.
+			//
+			// The previous test was /\.mp4|.jpg$/i — an alternation whose second branch
+			// is `.jpg$` with an unescaped dot, so it matched every JPEG too and sent it
+			// to file-loader with outputPath 'video'. Together with the rule that
+			// followed it (/\.jpg/i → outputPath 'img') and the image rule above, a
+			// single .jpg was run through three loaders in a chain and emitted as a
+			// 72-byte fragment. Every course image in the app rendered broken.
 			{
-				test: /\.mp4|.jpg$/i,
+				test: /\.mp4$/i,
 				use: [
 					{
 						loader: 'file-loader',
 						options: {
 							name: '[name].[ext]',
 							outputPath: 'video'
-						}
-					}
-				]
-			},
-			{
-				test: /\.jpg/i,
-				use: [
-					{
-						loader: 'file-loader',
-						options: {
-							name: '[name].[ext]',
-							outputPath: 'img'
 						}
 					}
 				]
