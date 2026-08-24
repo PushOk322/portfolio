@@ -13,8 +13,10 @@ const pages = Object.fromEntries(
 )
 
 export default defineConfig({
-	// Deployed at the domain root, with the demos mounted alongside at /demos/.
-	base: '/',
+	// Domain root by default, with the demos mounted alongside at /demos/. A GitHub
+	// Pages project site lives under /<repo>/ instead, so SITE_BASE overrides it — the
+	// same variable scripts/build-pages.mjs reads for the URLs it writes by hand.
+	base: (process.env.SITE_BASE || '/').replace(/\/*$/, '/'),
 	build: {
 		outDir: 'dist',
 		rollupOptions: { input: pages },

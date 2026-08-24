@@ -26,14 +26,22 @@ const MENTIONS = resolve(SITE, '..', 'mentions', 'mentions.json');
    most, and the site then paints from a single request. */
 const CSS = await readFile(resolve(SITE, 'src', 'styles.css'), 'utf8');
 
+/* Where the site will be mounted. Everything internal is written root-absolute, which
+   is right for a domain root and wrong for a GitHub Pages project site living under
+   /<repo>/. SITE_BASE prefixes every internal URL; it always ends in a slash so the
+   templates can write `${BASE}cv.pdf` without thinking about it.
+
+   SITE_ORIGIN fills og:url and canonical, which have to be absolute. */
+const BASE = (process.env.SITE_BASE || '/').replace(/\/*$/, '/');
+
 const PROFILE = {
 	name: 'Pavlo Tyshkovets',
 	role: 'Frontend developer — real-time 3D configurators',
 	email: 'tishkovets.pavlo@gmail.com',
 	github: 'https://github.com/PushOk322',
 	linkedin: 'https://www.linkedin.com/in/pavlo-tyshkovets-5b5224251/',
-	// Set to a real absolute origin before deploying; used for og:url and og:image.
-	origin: 'https://example.invalid'
+	// Absolute origin, used for og:url and og:image. Override with SITE_ORIGIN.
+	origin: (process.env.SITE_ORIGIN || 'https://example.invalid').replace(/\/+$/, '')
 };
 
 /* Measured on a real first load of each built demo, served from a subpath. Kept
@@ -149,11 +157,11 @@ function head({ title, description, url, image, extraCss = '', lcpPoster = '' })
   <meta property="og:image" content="${esc(image)}" />
   <meta name="twitter:card" content="summary_large_image" />
 
-  <link rel="icon" href="/favicon.png" type="image/png" sizes="64x64" />
-  <link rel="icon" href="/favicon-32.png" type="image/png" sizes="32x32" />
+  <link rel="icon" href="${BASE}favicon.png" type="image/png" sizes="64x64" />
+  <link rel="icon" href="${BASE}favicon-32.png" type="image/png" sizes="32x32" />
 
-  <link rel="preload" href="/fonts/ibm-plex-mono-latin-500-normal.woff2" as="font" type="font/woff2" crossorigin />
-  <link rel="preload" href="/fonts/ibm-plex-sans-latin-400-normal.woff2" as="font" type="font/woff2" crossorigin />${lcpPoster ? `
+  <link rel="preload" href="${BASE}fonts/ibm-plex-mono-latin-500-normal.woff2" as="font" type="font/woff2" crossorigin />
+  <link rel="preload" href="${BASE}fonts/ibm-plex-sans-latin-400-normal.woff2" as="font" type="font/woff2" crossorigin />${lcpPoster ? `
   <link rel="preload" href="${lcpPoster}" as="image" type="image/webp" fetchpriority="high"
         imagesrcset="${lcpPoster.replace('.webp', '@800.webp')} 800w, ${lcpPoster} 1600w"
         imagesizes="(max-width: 860px) calc(100vw - 80px), 42vw" />` : ''}
@@ -162,13 +170,13 @@ function head({ title, description, url, image, extraCss = '', lcpPoster = '' })
 
 function masthead(active = '') {
 	const cv = existsSync(join(SITE, 'public', 'cv.pdf'))
-		? '<li><a class="masthead__link" href="/cv.pdf">CV</a></li>'
+		? `<li><a class="masthead__link" href="${BASE}cv.pdf">CV</a></li>`
 		: `<li><a class="masthead__link" href="#" aria-disabled="true"
             title="Drop cv.pdf into site/public/ and this link turns on">CV</a></li>`;
 
 	return `<header class="masthead">
     <div class="shell masthead__inner">
-      <a class="masthead__name" href="/">${esc(PROFILE.name)}</a>
+      <a class="masthead__name" href="${BASE}">${esc(PROFILE.name)}</a>
       <nav aria-label="Elsewhere">
         <ul class="masthead__links">
           <li><a class="masthead__link" href="${PROFILE.github}" rel="me noreferrer">GitHub</a></li>
@@ -218,18 +226,18 @@ function entry(demo, index) {
 	return `<li class="entry">
         <figure class="entry__figure">
           <img class="entry__poster"
-               src="/posters/${demo.slug}.webp"
-               srcset="/posters/${demo.slug}@800.webp 800w, /posters/${demo.slug}.webp 1600w"
+               src="${BASE}posters/${demo.slug}.webp"
+               srcset="${BASE}posters/${demo.slug}@800.webp 800w, ${BASE}posters/${demo.slug}.webp 1600w"
                sizes="(max-width: 860px) calc(100vw - 80px), 42vw"
                width="1600" height="900" ${loadAttrs} alt="" />
           ${flag}
         </figure>
         <div class="entry__body">
-          <h3 class="entry__title"><a href="/${demo.slug}.html">${esc(demo.title)}</a></h3>
+          <h3 class="entry__title"><a href="${BASE}${demo.slug}.html">${esc(demo.title)}</a></h3>
           <p class="entry__tagline">${esc(demo.tagline)}</p>
           ${specBlock(demo.slug)}
           <ul class="tags">${demo.tags.map((t) => `<li>${esc(t)}</li>`).join('')}</ul>
-          <a class="launch" href="/${demo.slug}.html">Open ${esc(demo.title)}
+          <a class="launch" href="${BASE}${demo.slug}.html">Open ${esc(demo.title)}
             <span class="launch__arrow" aria-hidden="true">→</span></a>
         </div>
       </li>`;
@@ -257,9 +265,9 @@ function indexPage(demos, mentions) {
 ${head({
 	title: `${PROFILE.name} — real-time 3D on the web`,
 	description,
-	url: `${PROFILE.origin}/`,
-	image: `${PROFILE.origin}/og.png`,
-	lcpPoster: demos.length ? `/posters/${demos[0].slug}.webp` : ''
+	url: `${PROFILE.origin}${BASE}`,
+	image: `${PROFILE.origin}${BASE}og.png`,
+	lcpPoster: demos.length ? `${BASE}posters/${demos[0].slug}.webp` : ''
 })}
 </head>
 <body>
@@ -357,8 +365,8 @@ function demoPage(demo, studyHtml, mark) {
 ${head({
 	title: `${demo.title} — ${PROFILE.name}`,
 	description: demo.tagline,
-	url: `${PROFILE.origin}/${demo.slug}.html`,
-	image: `${PROFILE.origin}/posters/${demo.slug}.webp`
+	url: `${PROFILE.origin}${BASE}${demo.slug}.html`,
+	image: `${PROFILE.origin}${BASE}posters/${demo.slug}.webp`
 })}
 </head>
 <body>
@@ -366,7 +374,7 @@ ${head({
 
   <main>
     <div class="shell">
-      <a class="back" href="/"><span aria-hidden="true">←</span> All work</a>
+      <a class="back" href="${BASE}"><span aria-hidden="true">←</span> All work</a>
 
       <header class="demo-head">
         <p class="demo-head__mark" aria-hidden="true">${mark}</p>
@@ -375,14 +383,14 @@ ${head({
       </header>
 
       <div class="stage">
-        <iframe class="stage__frame" src="/demos/${demo.slug}/index.html"
+        <iframe class="stage__frame" src="${BASE}demos/${demo.slug}/index.html"
                 title="${esc(demo.title)} — live demo" loading="lazy"
                 allow="xr-spatial-tracking; fullscreen"></iframe>
       </div>
 
       <p class="stage__note">
         <span>Live build${m ? ` · ${esc(m.payload)} · ${m.external} third-party requests${m.externalNote ? ` ${esc(m.externalNote)}` : ''}` : ''}</span>
-        <a href="/demos/${demo.slug}/index.html" target="_blank" rel="noopener">Open full screen ↗</a>
+        <a href="${BASE}demos/${demo.slug}/index.html" target="_blank" rel="noopener">Open full screen ↗</a>
       </p>
     </div>
 

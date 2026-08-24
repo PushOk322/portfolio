@@ -14,7 +14,7 @@ import { tmpdir } from 'node:os';
 const HERE = dirname(fileURLToPath(import.meta.url));
 const CHROME = 'C:/Program Files/Google/Chrome/Application/chrome.exe';
 const PORT = 9334;
-const ORIGIN = 'http://localhost:4173';
+const ORIGIN = process.env.PROBE_ORIGIN || 'http://localhost:4173';
 const W = 1600, H = 900;
 const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
 
@@ -274,6 +274,44 @@ const PLANS = {
     settle: 2500,
     steps: [
       { label: 'scroll to TV card', js: `(() => { const tv=[...document.querySelectorAll('.entry')].find(e=>/TV Course/i.test(e.textContent)); tv.scrollIntoView({block:'center'}); return 'ok'; })()`, wait: 1200, shot: true },
+    ],
+  },
+
+  pagesroot: {
+    path: '/portfolio/index.html',
+    settle: 2500,
+    steps: [
+      { label: 'scroll through every card', js: `(async () => {
+          for (const img of document.querySelectorAll('.entry__poster')) {
+            img.scrollIntoView({block:'center'});
+            await new Promise(r=>setTimeout(r,350));
+          }
+          await new Promise(r=>setTimeout(r,1500));
+          const res = performance.getEntriesByType('resource');
+          return JSON.stringify({
+            total: res.length,
+            failures: res.filter(e => e.responseStatus >= 400).map(e => e.responseStatus + ' ' + e.name),
+            postersOk: [...document.querySelectorAll('.entry__poster')].filter(i => i.complete && i.naturalWidth > 0).length
+                       + ' / ' + document.querySelectorAll('.entry__poster').length
+          });
+        })()`, wait: 500, shot: true },
+    ],
+  },
+
+  pagesdemo: {
+    path: '/portfolio/tv-course-browser.html',
+    settle: 6000,
+    steps: [
+      { label: 'iframe + assets', js: `(() => {
+          const f = document.querySelector('.stage__frame');
+          const res = performance.getEntriesByType('resource');
+          return JSON.stringify({
+            iframeSrc: f ? f.getAttribute('src') : '(no iframe)',
+            backLink: document.querySelector('.back')?.getAttribute('href'),
+            openLink: [...document.querySelectorAll('a')].map(a=>a.getAttribute('href')).find(h=>h && h.includes('/demos/')),
+            failures: res.filter(e => e.responseStatus >= 400).map(e => e.responseStatus + ' ' + e.name)
+          });
+        })()`, wait: 500, shot: true },
     ],
   },
 
