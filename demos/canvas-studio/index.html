@@ -6,6 +6,9 @@
   ============================================================================
   Canvas Studio — 2D canvas experiments built at Avada Media.
   Showcase build; see DEMO_NOTICE.md.
+
+  The Fabric.js canvas below is the original 600x312 surface and the script
+  still binds every control by the same id. Everything around it is chrome.
 -->
 <!DOCTYPE html>
 <html lang="en">
@@ -15,27 +18,101 @@
             name="viewport"
             content="width=device-width, initial-scale=1.0"
     />
-    <link rel="stylesheet" href="./src/fabric/t-shirt-fabric.css"/>
+    <title>T-shirt designer — Canvas Studio</title>
     <link rel="stylesheet" href="./src/normalize.css"/>
-    <title>T-shirt Designer — Canvas Studio</title>
     <link rel="stylesheet" href="./src/nav.css"/>
+    <!-- After normalize: it sets `color: #fff` and turns <body> into a centred
+         flex column for the other eight pages. This one lays itself out. -->
+    <link rel="stylesheet" href="./src/fabric/t-shirt-fabric.css"/>
     <link rel="stylesheet" href="./portfolio/badge.css"/>
 </head>
 <body data-pf-badge-text="Portfolio build" data-pf-badge-back="../../">
-<canvas id="myCanvas"></canvas>
-<input type="file" id="imageUpload" accept="image/*"/>
-<button id="sampleButton">Add sample artwork</button>
-<button id="deleter">Choose an image to delete</button>
 
-<input type="text" id="textInput"/>
-<button id="textButton" disabled>Add text</button>
+<main class="ts">
+    <header class="ts__head">
+        <p class="ts__eyebrow">Print spec</p>
+        <h1 class="ts__title">T-shirt designer</h1>
+        <p class="ts__deck">Drop artwork on the garment, arrange it, and pull a proof.</p>
 
-<button id="triangleButton">Add triangle</button>
-<button id="rectangleButton">Add rectangle</button>
-<button id="circleButton">Add circle</button>
+        <dl class="ts__spec">
+            <div class="ts__spec-row"><dt>Library</dt>
+                <dd>Fabric.js</dd>
+            </div>
+            <div class="ts__spec-row"><dt>Surface</dt>
+                <dd>600 &times; 312</dd>
+            </div>
+            <div class="ts__spec-row"><dt>Proof</dt>
+                <dd>JPEG</dd>
+            </div>
+        </dl>
+    </header>
 
-<button id="downloadButton">Download</button>
+    <div class="ts__body">
+        <section class="stage" aria-label="Garment">
+            <div class="stage__mount">
+                <canvas id="myCanvas"></canvas>
+            </div>
 
+            <p class="stage__legend">
+                <span>Front</span>
+                <span>Back</span>
+            </p>
+
+            <!-- Signature: what the press would actually have to do. One screen per
+                 distinct ink; a raster image can't be spot-printed, so it books the
+                 four process screens. Rendered from canvas state, not from a count
+                 kept on the side. -->
+            <section class="sep" aria-live="polite">
+                <h2 class="sep__title">Separation</h2>
+                <p class="sep__empty" id="sepEmpty">Nothing on the garment yet.</p>
+                <ul class="sep__chips" id="sepChips"></ul>
+                <p class="sep__count" hidden id="sepTally">
+                    <span class="sep__num" id="sepCount">0</span>
+                    <span class="sep__unit" id="sepUnit">screens</span>
+                </p>
+            </section>
+        </section>
+
+        <aside class="rail" aria-label="Tools">
+            <section class="rail__group">
+                <h2 class="rail__title">Artwork</h2>
+                <label class="btn btn--file">
+                    <span>Upload image</span>
+                    <input type="file" id="imageUpload" accept="image/*"/>
+                </label>
+                <button class="btn" id="sampleButton">Add sample artwork</button>
+            </section>
+
+            <section class="rail__group">
+                <h2 class="rail__title">Type</h2>
+                <input class="field" type="text" id="textInput" placeholder="Set some text"
+                       aria-label="Text to place on the garment"/>
+                <button class="btn" id="textButton" disabled>Add text</button>
+            </section>
+
+            <section class="rail__group">
+                <h2 class="rail__title">Shapes</h2>
+                <div class="rail__shapes">
+                    <button class="btn btn--shape" id="triangleButton">
+                        <span class="ink" style="--ink-chip:green"></span>Triangle
+                    </button>
+                    <button class="btn btn--shape" id="rectangleButton">
+                        <span class="ink" style="--ink-chip:blue"></span>Rectangle
+                    </button>
+                    <button class="btn btn--shape" id="circleButton">
+                        <span class="ink" style="--ink-chip:red"></span>Circle
+                    </button>
+                </div>
+            </section>
+
+            <section class="rail__group rail__group--end">
+                <h2 class="rail__title">Finish</h2>
+                <button class="btn btn--danger" id="deleter">Select an object first</button>
+                <button class="btn btn--press" id="downloadButton">Download proof</button>
+            </section>
+        </aside>
+    </div>
+</main>
 
 <script type="module" src="./src/fabric/t-shirt-fabric.js"></script>
 <script type="module" src="./src/nav.js"></script>

@@ -56,18 +56,20 @@ document.getElementById('sampleButton')?.addEventListener('click', () => {
 
 const deleteButton = document.getElementById('deleter')
 
-canvas.on('selection:created', () => {
-    deleteButton.innerText = 'Delete';
-});
+// The button is only live while something is selected, so it names which of the two
+// states it is in rather than sitting there as a dead control with hopeful copy.
+function armDelete(armed) {
+    deleteButton.classList.toggle('is-armed', armed);
+    deleteButton.innerText = armed ? 'Delete selected' : 'Select an object first';
+}
 
-canvas.on('selection:cleared', () => {
-    deleteButton.innerText = 'Choose an object to delete';
-});
+canvas.on('selection:created', () => armDelete(true));
+canvas.on('selection:updated', () => armDelete(true));
+canvas.on('selection:cleared', () => armDelete(false));
 
 deleteButton.addEventListener('click', () => {
     const activeObject = canvas.getActiveObject();
     if (activeObject) {
-        deleteButton.innerText = 'Delete';
         canvas.remove(activeObject);
     }
 });
@@ -145,5 +147,80 @@ document.getElementById('downloadButton')?.addEventListener('click', () => {
         a.click();
     });
 });
+
+
+/* Separation readout.
+ *
+ * On a press, every distinct flat colour is one screen, and a photograph cannot be
+ * separated into flat colours at all — it books the four process screens instead.
+ * So the strip under the stage is a real cost signal, not a badge: it is derived
+ * from the objects currently on the canvas every time that set changes.
+ *
+ * The garment itself is the one object added with `selectable: false`, which is what
+ * keeps it out of the count. */
+
+const sepChips = document.getElementById('sepChips');
+const sepCount = document.getElementById('sepCount');
+const sepUnit = document.getElementById('sepUnit');
+const sepTally = document.getElementById('sepTally');
+const sepEmpty = document.getElementById('sepEmpty');
+
+const PROCESS = 'process';
+
+function inkOf(object) {
+    if (object.isType?.('image') || object.type === 'image') return PROCESS;
+
+    const fill = object.fill;
+    if (typeof fill !== 'string') return PROCESS; // gradient or pattern: not one ink
+
+    try {
+        return '#' + new fabric.Color(fill).toHex().toLowerCase();
+    } catch {
+        return fill;
+    }
+}
+
+function renderSeparation() {
+    const inks = [...new Set(
+        canvas.getObjects().filter((o) => o.selectable !== false).map(inkOf)
+    )];
+
+    sepChips.replaceChildren();
+
+    for (const ink of inks) {
+        const chip = document.createElement('li');
+        chip.className = 'sep__chip';
+
+        const swatch = document.createElement('span');
+        swatch.className = 'sep__swatch';
+        const label = document.createElement('span');
+        label.className = 'sep__code';
+
+        if (ink === PROCESS) {
+            swatch.classList.add('sep__swatch--process');
+            label.textContent = 'CMYK';
+        } else {
+            swatch.style.setProperty('--swatch', ink);
+            label.textContent = ink.toUpperCase();
+        }
+
+        chip.append(swatch, label);
+        sepChips.append(chip);
+    }
+
+    // Process is four screens on the press, not one.
+    const screens = inks.reduce((total, ink) => total + (ink === PROCESS ? 4 : 1), 0);
+
+    sepCount.textContent = String(screens);
+    sepUnit.textContent = screens === 1 ? 'screen' : 'screens';
+    sepTally.hidden = screens === 0;
+    sepEmpty.hidden = screens > 0;
+}
+
+canvas.on('object:added', renderSeparation);
+canvas.on('object:removed', renderSeparation);
+canvas.on('object:modified', renderSeparation);
+
+renderSeparation();
 
 

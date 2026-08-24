@@ -1,1 +1,375 @@
+/* T-shirt designer.
+ *
+ * Loaded after normalize.css, which sets `color: #fff` and makes <body> a centred
+ * flex column for the other eight pages. Both are undone here rather than edited
+ * there, so this page's layout cannot reach the rest of the demo.
+ *
+ * Direction: a press spec sheet. The garment sits mounted on a cutting-mat grid,
+ * the tools read as a job docket, and the one loud element is the separation strip
+ * under the stage — which is real canvas state, not decoration. */
 
+.ts {
+  --board: #fff;
+  --mat: #f3f5f8;
+  --ink: #16203a;
+  --ink-2: #5d6b85;
+  --rule: #d2d8e2;
+  --press: #c2410c;
+
+  /* Bahnschrift on Windows, DIN Alternate on macOS, Arial Narrow everywhere else:
+     a condensed technical face without a webfont request. This build makes none. */
+  --face-display: "Bahnschrift", "DIN Alternate", "Arial Narrow", "Helvetica Neue", sans-serif;
+  --face-ui: Inter, "Segoe UI", system-ui, -apple-system, sans-serif;
+  --face-data: "Cascadia Mono", "SF Mono", ui-monospace, Consolas, monospace;
+
+  width: min(1040px, 100%);
+  margin: 0 auto;
+  padding: 30px 24px 64px;
+  box-sizing: border-box;
+  font-family: var(--face-ui);
+  color: var(--ink);
+  text-align: left;
+}
+
+/* Undo the shared normalize rules, for this page only. */
+body {
+  display: block;
+  color: #16203a;
+  background: #e8ebf0;
+}
+
+.ts *,
+.ts *::before,
+.ts *::after { box-sizing: border-box; }
+
+/* ---------- header ---------------------------------------------------- */
+
+.ts__head {
+  padding-bottom: 20px;
+  border-bottom: 2px solid var(--ink);
+}
+
+.ts__eyebrow {
+  margin: 0;
+  font-family: var(--face-display);
+  font-size: 13px;
+  font-weight: 600;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: var(--press);
+}
+
+.ts__title {
+  margin: 4px 0 0;
+  font-family: var(--face-display);
+  font-size: clamp(38px, 6vw, 58px);
+  font-weight: 700;
+  line-height: 0.95;
+}
+
+.ts__deck {
+  margin: 10px 0 0;
+  max-width: 54ch;
+  font-size: 15px;
+  line-height: 1.5;
+  color: var(--ink-2);
+}
+
+.ts__spec {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px 28px;
+  margin: 18px 0 0;
+}
+
+.ts__spec-row { display: flex; align-items: baseline; gap: 8px; }
+
+.ts__spec dt {
+  font-family: var(--face-display);
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--ink-2);
+}
+
+.ts__spec dd {
+  margin: 0;
+  font-family: var(--face-data);
+  font-size: 13px;
+  color: var(--ink);
+}
+
+/* ---------- layout ---------------------------------------------------- */
+
+.ts__body {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 262px;
+  gap: 26px;
+  align-items: start;
+  margin-top: 26px;
+}
+
+/* ---------- stage ----------------------------------------------------- */
+
+/* Drafting-surface dots rather than a ruled grid: a full grid reads as a table and
+   competes with the garment, which is the thing to look at. */
+.stage {
+  padding: 26px 26px 22px;
+  border: 1px solid var(--rule);
+  background-color: var(--mat);
+  background-image: radial-gradient(rgba(22, 32, 58, 0.13) 1px, transparent 1px);
+  background-size: 16px 16px;
+}
+
+.stage__mount {
+  width: fit-content;
+  margin: 0 auto;
+  padding: 10px;
+  background: var(--board);
+  border: 1px solid var(--rule);
+  box-shadow: 0 1px 0 rgba(22, 32, 58, 0.06), 0 12px 28px -20px rgba(22, 32, 58, 0.5);
+}
+
+/* Fabric wraps #myCanvas in .canvas-container and sets its size inline. */
+.stage__mount .canvas-container { display: block; }
+
+/* Same width as the mount, so each label lands under its own half of the flat-lay. */
+.stage__legend {
+  display: flex;
+  justify-content: space-around;
+  width: fit-content;
+  min-width: min(620px, 100%);
+  margin: 12px auto 0;
+  font-family: var(--face-display);
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--ink-2);
+}
+
+/* ---------- separation strip (the signature) -------------------------- */
+
+.sep {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 12px 18px;
+  min-height: 62px;
+  margin-top: 24px;
+  padding: 12px 18px;
+  background: var(--board);
+  border: 1px solid var(--rule);
+}
+
+.sep__title {
+  margin: 0;
+  font-family: var(--face-display);
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--ink-2);
+}
+
+.sep__empty {
+  margin: 0;
+  font-size: 13px;
+  color: var(--ink-2);
+}
+
+.sep__chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.sep__chip {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  padding: 4px 8px 4px 4px;
+  background: var(--board);
+  border: 1px solid var(--rule);
+}
+
+.sep__swatch {
+  width: 20px;
+  height: 20px;
+  background: var(--swatch, #000);
+  box-shadow: inset 0 0 0 1px rgba(22, 32, 58, 0.18);
+}
+
+/* Process colour is not one ink, so it is drawn as the four it actually books. */
+.sep__swatch--process {
+  background: linear-gradient(135deg, #00aeef 0 25%, #ec008c 25% 50%, #fff200 50% 75%, #1c1c1c 75% 100%);
+}
+
+.sep__code {
+  font-family: var(--face-data);
+  font-size: 11px;
+  color: var(--ink-2);
+}
+
+.sep__count {
+  display: flex;
+  align-items: baseline;
+  gap: 6px;
+  margin: 0 0 0 auto;
+}
+
+/* `display: flex` above outranks the UA rule for [hidden], so restate it. */
+.sep__count[hidden] { display: none; }
+
+.sep__num {
+  font-family: var(--face-display);
+  font-size: 30px;
+  font-weight: 700;
+  line-height: 1;
+  color: var(--press);
+}
+
+.sep__unit {
+  font-family: var(--face-display);
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--ink-2);
+}
+
+/* ---------- tool rail ------------------------------------------------- */
+
+.rail {
+  display: flex;
+  flex-direction: column;
+  gap: 22px;
+  padding: 22px 20px;
+  background: var(--board);
+  border: 1px solid var(--rule);
+}
+
+.rail__group { display: flex; flex-direction: column; gap: 8px; }
+
+.rail__group--end {
+  padding-top: 18px;
+  border-top: 1px solid var(--rule);
+}
+
+.rail__title {
+  margin: 0 0 2px;
+  font-family: var(--face-display);
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--ink-2);
+}
+
+.rail__shapes { display: flex; flex-direction: column; gap: 6px; }
+
+/* ---------- controls -------------------------------------------------- */
+
+.ts .btn {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  width: 100%;
+  padding: 10px 12px;
+  font-family: var(--face-ui);
+  font-size: 13.5px;
+  font-weight: 500;
+  color: var(--ink);
+  text-align: left;
+  background: var(--mat);
+  border: 1px solid var(--rule);
+  border-radius: 0;
+  cursor: pointer;
+  transition: background 0.14s ease, border-color 0.14s ease, color 0.14s ease;
+}
+
+.ts .btn:hover:not(:disabled) { background: #e4e8ef; border-color: #b9c2cf; }
+
+.ts .btn:focus-visible,
+.ts .btn--file:focus-within {
+  outline: 2px solid var(--press);
+  outline-offset: 2px;
+}
+
+.ts .btn:disabled {
+  color: #9aa5b8;
+  border-color: #e3e7ee;
+  cursor: not-allowed;
+}
+
+/* The native file input keeps the id the script binds to; the label is the button. */
+.ts .btn--file input {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  opacity: 0;
+  cursor: pointer;
+}
+
+.ts .btn--press {
+  color: #fff;
+  font-weight: 600;
+  background: var(--press);
+  border-color: var(--press);
+}
+
+.ts .btn--press:hover:not(:disabled) { background: #9f3609; border-color: #9f3609; }
+
+/* Armed only while something is selected — driven by the canvas selection events. */
+.ts .btn--danger { color: #9aa5b8; cursor: not-allowed; }
+
+.ts .btn--danger.is-armed {
+  color: var(--press);
+  border-color: var(--press);
+  cursor: pointer;
+}
+
+.ts .btn--danger.is-armed:hover { background: #fbe9df; }
+
+.ink {
+  width: 12px;
+  height: 12px;
+  flex: none;
+  background: var(--ink-chip);
+  box-shadow: inset 0 0 0 1px rgba(22, 32, 58, 0.25);
+}
+
+.ts .field {
+  width: 100%;
+  padding: 10px 12px;
+  font-family: var(--face-ui);
+  font-size: 13.5px;
+  color: var(--ink);
+  background: #fff;
+  border: 1px solid var(--rule);
+  border-radius: 0;
+}
+
+.ts .field::placeholder { color: #9aa5b8; }
+.ts .field:focus-visible { outline: 2px solid var(--press); outline-offset: 1px; }
+
+/* ---------- narrow ---------------------------------------------------- */
+
+@media (max-width: 900px) {
+  .ts { padding: 24px 16px 56px; }
+  .ts__body { grid-template-columns: minmax(0, 1fr); }
+  .stage { padding: 18px 14px 16px; }
+  .sep__count { margin-left: 0; }
+  .rail__shapes { flex-direction: row; flex-wrap: wrap; }
+  .ts .btn--shape { width: auto; flex: 1 1 auto; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .ts .btn { transition: none; }
+}
