@@ -315,6 +315,34 @@ const PLANS = {
     ],
   },
 
+  live: {
+    path: '/portfolio/index.html',
+    settle: 3000,
+    steps: [
+      { label: 'index audit', js: `(async () => {
+          for (const img of document.querySelectorAll('.entry__poster')) {
+            img.scrollIntoView({block:'center'}); await new Promise(r=>setTimeout(r,350));
+          }
+          await new Promise(r=>setTimeout(r,1500));
+          const res = performance.getEntriesByType('resource');
+          return JSON.stringify({
+            failures: res.filter(e => e.responseStatus >= 400).map(e => e.responseStatus + ' ' + e.name),
+            postersOk: [...document.querySelectorAll('.entry__poster')].filter(i => i.complete && i.naturalWidth > 0).length
+                       + ' / ' + document.querySelectorAll('.entry__poster').length,
+            cv: document.querySelector('.masthead__link[href$="cv.pdf"]')?.getAttribute('href') || 'CV LINK OFF'
+          });
+        })()`, wait: 500, shot: true },
+    ],
+  },
+
+  livegame: {
+    path: '/portfolio/demos/orbital-slice/index.html',
+    settle: 7000,
+    steps: [
+      { label: 'game boots?', js: `(() => { const g=globalThis.__PHASER_GAME__; return JSON.stringify({ running: !!g && g.isRunning, size: g ? [g.scale.width, g.scale.height] : null, scenes: g ? g.scene.scenes.map(x=>x.scene.key) : null }); })()`, wait: 300, shot: true },
+    ],
+  },
+
   tv: {
     path: '/demos/tv-course-browser/index.html',
     settle: 4500,
