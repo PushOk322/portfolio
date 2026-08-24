@@ -121,7 +121,13 @@ const App = () => {
 						element={<CoursePreview />}
 					/>
 					<Route path={`${PATH.COURSES}/:course_id`} element={<Course />} />
-					<Route path={`${PATH.VIDEO}`} element={<VideoPage />} />
+					{/* CoursePreview links to /video/:course_id/:video_id, so the bare `video`
+					    path matched nothing and the player rendered a blank screen. Declared
+					    the same way as the course routes above. */}
+					<Route
+						path={`${PATH.VIDEO}/:course_id/:video_id`}
+						element={<VideoPage />}
+					/>
 					<Route path={`${PATH.AUTH}/*`} element={<Authorization />} />
 					<Route path={`${PATH.ACCOUNT}/*`} element={<Account />} />
 					<Route path={PATH.KEYACTIVATION} element={<KeyActivation />} />

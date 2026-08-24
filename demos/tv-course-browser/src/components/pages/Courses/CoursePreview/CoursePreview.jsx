@@ -35,6 +35,12 @@ const CoursePreview = ({ variant = 'preview' }) => {
 
 	const course = data?.find((item) => item.id === courseIdNumber)
 
+	// `data` is null until the courses fetch resolves. Navigating in-app always has it
+	// by now, which is why this never showed up in normal use — but a cold load straight
+	// at a course URL (a refresh, or a shared link) renders this first, and
+	// `course.videos` threw on undefined. All hooks above run unconditionally.
+	if (!course) return null
+
 	return (
 		<FocusContext.Provider value={focusKey}>
 			<Container variant='fullscreen' ref={ref}>

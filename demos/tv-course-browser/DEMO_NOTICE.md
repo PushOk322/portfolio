@@ -27,6 +27,10 @@ What changed:
   was sitting in the repo root.
 - A hardcoded Basic-auth credential was replaced with a placeholder.
 - A 69 MB video file — referenced nowhere in the source — was left out.
-- Google Fonts replaced with self-hosted copies. **No third-party requests.**
+- Google Fonts replaced with self-hosted copies. **Loading the app makes no
+  third-party requests.** Opening a session is the one exception: the player
+  embeds YouTube, as the production app did. The course videos are real videos
+  by their original creators — the course groupings and paywall flags around
+  them are invented.
 
 See `CHANGES.md` for the exact list.

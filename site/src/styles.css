@@ -448,6 +448,20 @@ a {
 	color: var(--signal);
 }
 
+/* One demo can exceed its measured figure once you interact with it. The caveat sits
+   under the number rather than replacing it, so the stat stays scannable. */
+.spec__note {
+	display: block;
+	max-width: 22ch;
+	margin-top: 3px;
+	font-family: var(--mono);
+	font-size: 10px;
+	line-height: 1.35;
+	letter-spacing: 0.02em;
+	text-transform: none;
+	color: var(--ink-dim);
+}
+
 .tags {
 	display: flex;
 	flex-wrap: wrap;

@@ -42,8 +42,16 @@ const VideoPage = () => {
 		courseId: state.id
 	}))
 
-	const course = data?.find((item) => item.id === courseId)
-	const video = course?.videos.find((item) => item.id === currentVideoId)
+	// The stores are only populated by VideoCard. Reaching the player any other way —
+	// "Watch intro", a refresh, a shared link — left them empty, so ReactPlayer got
+	// url={undefined} and rendered an empty page. The route carries both ids, so fall
+	// back to them. Store first, because prev/next moves the video without touching
+	// the URL.
+	const resolvedCourseId = courseId || Number(urlParams.course_id)
+	const resolvedVideoId = currentVideoId || Number(urlParams.video_id)
+
+	const course = data?.find((item) => item.id === resolvedCourseId)
+	const video = course?.videos.find((item) => item.id === resolvedVideoId)
 
 	const videoPlayerRef = useRef(null)
 	const controlRef = useRef(null)

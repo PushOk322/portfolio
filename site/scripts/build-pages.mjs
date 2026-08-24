@@ -45,7 +45,15 @@ const MEASURED = {
 	'boat-configurator': { payload: '7.30 MB', requests: 10, external: 0, mine: '271 / 776' },
 	'orbital-slice': { payload: '1.62 MB', requests: 8, external: 0, mine: '536 / 895' },
 	'canvas-studio': { payload: '0.30 MB', requests: 5, external: 0, mine: '10 / 10' },
-	'tv-course-browser': { payload: '1.08 MB', requests: 16, external: 0, mine: '115 / 214' }
+	'tv-course-browser': {
+		payload: '1.08 MB',
+		requests: 16,
+		external: 0,
+		mine: '115 / 214',
+		// Every number here is a first load. This is the one demo that can exceed it
+		// later: opening a session embeds the YouTube player the production app used.
+		externalNote: 'on load — opening a session embeds the YouTube player'
+	}
 };
 
 /* Display order. Deliberate, not alphabetical: the two strongest 3D pieces open,
@@ -190,7 +198,9 @@ function specBlock(slug) {
 	return `<dl class="spec">
             <div><dt>Payload</dt><dd>${esc(m.payload)}</dd></div>
             <div><dt>Requests</dt><dd>${m.requests}</dd></div>
-            <div><dt>Third-party</dt><dd data-zero="${m.external === 0}">${m.external}</dd></div>
+            <div><dt>Third-party</dt><dd data-zero="${m.external === 0}">${m.external}${
+							m.externalNote ? `<span class="spec__note">${esc(m.externalNote)}</span>` : ''
+						}</dd></div>
             <div><dt>My commits</dt><dd>${esc(m.mine)}</dd></div>
           </dl>`;
 }
@@ -268,7 +278,7 @@ ${head({
         <dl class="hero__stats">
           <div><dt>Demos</dt><dd>6</dd></div>
           <div><dt>Commercial years</dt><dd>3.5</dd></div>
-          <div><dt>Third-party requests</dt><dd>0</dd></div>
+          <div><dt>Third-party requests on load</dt><dd>0</dd></div>
         </dl>
       </div>
     </section>
@@ -371,7 +381,7 @@ ${head({
       </div>
 
       <p class="stage__note">
-        <span>Live build${m ? ` · ${esc(m.payload)} · ${m.external} third-party requests` : ''}</span>
+        <span>Live build${m ? ` · ${esc(m.payload)} · ${m.external} third-party requests${m.externalNote ? ` ${esc(m.externalNote)}` : ''}` : ''}</span>
         <a href="/demos/${demo.slug}/index.html" target="_blank" rel="noopener">Open full screen ↗</a>
       </p>
     </div>
