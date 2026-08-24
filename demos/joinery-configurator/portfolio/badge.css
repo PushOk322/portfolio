@@ -1,0 +1,86 @@
+/* Portfolio build badge.
+   Master copy — demos get a copy at demos/<slug>/portfolio/badge.css, so each demo
+   stays independently deployable. Edit here, then re-copy.
+
+   Two rules are load-bearing:
+   - The wrapper is pointer-events:none so the badge can sit over a canvas without
+     ever swallowing a drag. Only the two buttons re-enable pointer events.
+   - Nothing here draws into the canvas, so canvas screenshots and GLB exports are
+     unaffected. Corner placement keeps it out of a 16:9 poster crop of the centre. */
+
+.pf-badge {
+  position: fixed;
+  left: 12px;
+  bottom: 12px;
+  z-index: 2147483000;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  max-width: min(340px, calc(100vw - 24px));
+  padding: 7px 8px 7px 11px;
+  font: 400 12px/1.35 Inter, "Segoe UI", system-ui, sans-serif;
+  color: #0f172a;
+  background: rgba(255, 255, 255, 0.92);
+  border: 1px solid #e2e8f0;
+  border-radius: 8px;
+  box-shadow: 0 1px 3px rgba(15, 23, 42, 0.08);
+  backdrop-filter: blur(6px);
+  pointer-events: none;
+}
+
+/* Anchored to the app's own viewport rather than the window. Requires the anchor to
+   be a positioned element (the demos' .viewport already is). */
+.pf-badge--anchored { position: absolute; }
+
+.pf-badge[hidden] { display: none; }
+
+.pf-badge__dot {
+  flex: 0 0 auto;
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: #f59e0b;
+}
+
+.pf-badge__text { min-width: 0; }
+
+.pf-badge__link {
+  color: inherit;
+  text-decoration: underline;
+  text-underline-offset: 2px;
+  pointer-events: auto;
+}
+
+.pf-badge__close {
+  flex: 0 0 auto;
+  width: 22px;
+  height: 22px;
+  padding: 0;
+  font: inherit;
+  font-size: 15px;
+  line-height: 1;
+  color: #64748b;
+  background: transparent;
+  border: 0;
+  border-radius: 5px;
+  cursor: pointer;
+  pointer-events: auto;
+}
+
+.pf-badge__close:hover { background: #f1f5f9; color: #0f172a; }
+.pf-badge__close:focus-visible { outline: 2px solid #0f172a; outline-offset: 1px; }
+
+@media (max-width: 560px) {
+  .pf-badge { font-size: 11px; padding: 6px 6px 6px 9px; }
+}
+
+@media (prefers-color-scheme: dark) {
+  .pf-badge {
+    color: #e2e8f0;
+    background: rgba(15, 23, 42, 0.92);
+    border-color: #334155;
+  }
+  .pf-badge__close { color: #94a3b8; }
+  .pf-badge__close:hover { background: #1e293b; color: #e2e8f0; }
+  .pf-badge__close:focus-visible { outline-color: #e2e8f0; }
+}

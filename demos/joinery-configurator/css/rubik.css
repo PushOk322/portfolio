@@ -1,0 +1,21 @@
+/* Self-hosted Rubik.
+   Replaces the two <link> tags to fonts.googleapis.com. Those were the demo's only
+   third-party requests from the page itself: every visitor's IP reached Google before
+   the first paint, which is a consent question this portfolio does not want to have.
+   Subset: latin, 400 + 700 — the only weights the stylesheet asks for. */
+
+@font-face {
+  font-family: 'Rubik';
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url('../src/fonts/rubik-latin-400-normal.woff2') format('woff2');
+}
+
+@font-face {
+  font-family: 'Rubik';
+  font-style: normal;
+  font-weight: 700;
+  font-display: swap;
+  src: url('../src/fonts/rubik-latin-700-normal.woff2') format('woff2');
+}
