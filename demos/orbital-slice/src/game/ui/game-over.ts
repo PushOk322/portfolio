@@ -51,7 +51,6 @@ export class GameOver {
             })
 
             setTimeout(() => {
-              console.log('Ensuring ui.hidePreloaderText() runs')
               ui.hidePreloaderText()
             }, 100)
             return
@@ -82,7 +81,6 @@ export class GameOver {
           })
 
           setTimeout(() => {
-            console.log('Ensuring ui.hidePreloaderText() runs')
             ui.hidePreloaderText()
           }, 100)
         }

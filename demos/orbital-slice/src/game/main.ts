@@ -12,7 +12,7 @@ const config: Phaser.Types.Core.GameConfig = {
   canvas: document.getElementById('game-canvas') as HTMLCanvasElement,
   width: innerWidth,
   height: innerHeight,
-  title: 'Galactic Slice',
+  title: 'Orbital Slice',
   scene: scenes,
   version: '0.0.1',
   backgroundColor: '#000',

@@ -104,7 +104,6 @@ export class Preload extends Phaser.Scene {
       gameState.isToday = userStats.last_combo_at && isToday(userStats.last_combo_at)
       gameState.isGetBonus = userStats.last_combo_at && isToday(userStats.last_combo_at)
 
-      console.log(gameState)
     }
 
     getDailyCombo()

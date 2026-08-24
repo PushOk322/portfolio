@@ -20,6 +20,11 @@
  * Both starters must run in the same tick, before Phaser boots on the next animation
  * frame, so the scenes find a UI to talk to.
  */
+// Must come first: normalize + the --white/--golden/--general-font tokens that every
+// rule in game/styles/index.scss reads. The React entry imported this; the extraction
+// dropped it, so the whole UI rendered unstyled — no reset, all tokens undefined.
+import './styles/global.scss'
+
 import { game, gameUI, gameOverUI, aboutGameUI, leaderboardPreGameUI, startGame } from '@/game/main'
 import { gameState } from '@/game/game/state/state'
 import { startUI, ui } from '@/game/ui/ui'

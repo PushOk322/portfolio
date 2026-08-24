@@ -89,7 +89,6 @@ export class GameUI {
       this.sound.classList.add('game__sound')
     } else {
       gameState.allPauseTime += new Date().getTime() - this.startPause.getTime();
-      console.log(gameState.allPauseTime);
       this.pauseBtn.innerHTML = `<img src='/images/game/icons/pause.svg' alt='pause button' />`
       gameState.gameContinue()
       this.sound.classList.remove('show')

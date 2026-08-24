@@ -218,7 +218,6 @@ export default class State {
   }
 
   checkBonusArray(id) {
-    console.log(gameState.planets)
     if (!this.isGetBonus) {
       if (this.bonusArrayStep !== 5) {
         if (this.bonusArray[this.bonusArrayStep] === id) {

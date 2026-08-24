@@ -30,17 +30,18 @@
     <div class="wrapper" data-pf-badge-anchor>
       <div id="root" class="ui">
         <div class="preload show">
-          <div class="preload__leaders leaders">
-            <div class="leaderboard__pre-game"></div>
-          </div>
-
           <img src="./images/game/preloader.gif" alt="" class="preload__image" />
 
           <p class="preload__text">Loading <span id="load-progress">0</span>%</p>
-
-          <button type="button" class="play">Play</button>
-          <button type="button" class="attempts-btn">Attempts</button>
         </div>
+
+        <!-- Both are position:fixed against the viewport. They must stay OUT of
+             .preload, which is transform-centred and would become their containing
+             block. In the original JSX they were siblings for the same reason.
+             `_hidden` is how the React shell suppressed the attempts button; this
+             build has unlimited attempts, so it never shows. -->
+        <button type="button" class="play"><span>Play</span></button>
+        <button type="button" class="attempts-btn _hidden">Attempts</button>
 
         <div class="about-game">
           <p class="about-game__title">How to play</p>
