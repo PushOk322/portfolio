@@ -117,37 +117,34 @@ gives you (`xxx.ns.cloudflare.com`). Usually live inside an hour.
 
 ## Before anyone reads it
 
-### 9. CAPTURE THE SIX POSTER SCREENSHOTS — free · 30 min
+### 9. ~~CAPTURE THE SIX POSTER SCREENSHOTS~~ — done
 
-**All six poster images are placeholders.** They are typographic cards carrying a
-visible "PLACEHOLDER — REPLACE WITH SCREENSHOT" chip, because the browser I had could
-not composite a frame — every demo draws through `requestAnimationFrame` and there
-was nothing to capture.
+All six are real screenshots now, captured at 1600x900 from the built demos and
+written to `demos/<slug>/poster.webp` plus the two `site/public/posters/` variants.
+`posterIsPlaceholder` is `false` everywhere, so the amber banners are gone.
 
-`POSTERS.md` has the exact steps and, for each demo, the specific frame worth
-shooting. The stairs one matters most: capture a **switchback with a quarter-turn
-landing**, not a straight flight — the turn is what proves the geometry is solved
-rather than modelled.
+What changed since this was written: the compositing problem was specific to the
+browser pane I had then. Driving the installed Chrome over the DevTools protocol
+renders and captures normally, WebGL included. `POSTERS.md` has the harness and the
+per-demo recipe if any of these ever needs reshooting.
 
-Set `"posterIsPlaceholder": false` in each demo's `meta.json` as you replace them.
-That flag drives the amber banner on the card, so it turns itself off.
+Each frame follows the brief in `POSTERS.md` — including the stairs switchback with
+the quarter-turn landing, and the focus ring on a card in the TV browser.
 
-### 10. PLAY-TEST ALL SIX DEMOS — free · 45 min
+### 10. ~~PLAY-TEST ALL SIX DEMOS~~ — done
 
-I verified structure, network and tests. **I could not verify a single rendered
-pixel** — no compositing, so no render loop and no screenshots. Everything visual is
-unconfirmed.
-
-In rough order of risk:
+**All six are now play-tested** in real Chrome, driven over the DevTools protocol at
+1600x900. Four of the six had real bugs; all are fixed and re-verified. Kept below with
+what was actually found, in the original order of risk.
 
 | Demo | What to check |
 |---|---|
-| **boat-configurator** | Highest risk — the control panel is new code I wrote against a scene API I did not. Swap engines (does it attach at `engine-point`?), change upholstery (does `inner-carpet` retexture?), and press Console view / Full view (do the GSAP camera tweens run?). |
-| **orbital-slice** | Does it actually play? Preload progress, Play button, slicing, the bonus combo, game over, and whether your best score survives a reload. |
-| **tv-course-browser** | Arrow through the hero into the course rows, press Enter on a course. Then open a session and see what the video page does with a fixture that has no playable file — that may need a poster fallback. |
-| **joinery-configurator** | Colour selection specifically. It resolves materials by name, and it is the thing the failed compression attempt would have broken. |
-| **stairs-generator** | Drag every slider to both ends, including flight count. |
-| **canvas-studio** | The t-shirt designer on a phone — everything is CSS-scaled to fit there, and Fabric's pointer mapping through a transform is worth eyeballing. |
+| ~~**boat-configurator**~~ | **Done — clean.** Engines attach at `engine-point`, swap and remove correctly; upholstery retextures `inner-carpet`; interior and hull colour both apply; both GSAP camera tweens and Reset run. No console errors. One UX wrinkle, not a bug: `inner-carpet` is the cockpit floor, so from the opening exterior camera Interior colour and Upholstery look like they do nothing. Only visible from Console view. |
+| ~~**orbital-slice**~~ | **Done.** It did not play — two real bugs, both fixed and verified end to end: the stylesheet holding the reset and every CSS token was imported by nothing, and the Play button was nested inside a transformed ancestor so it landed mid-screen instead of at the bottom. Preload, Play, slicing, scoring and best-score persistence all confirmed. |
+| ~~**tv-course-browser**~~ | **Done — three real bugs, all fixed.** (1) Cold-loading any course route white-screened: `course.videos` read while `data` was still `null`. In-app navigation never hit it; a refresh or a shared link always did. (2) The video route was declared as bare `video` while `CoursePreview` links to `/video/:course_id/:video_id`, so React Router matched nothing and rendered a blank page with no error — that is what looked like a missing poster fallback. (3) `VideoPage` resolved the course from a store only `VideoCard` populates, so "Watch intro" reached a player with `url={undefined}`. It now falls back to the route params it already read. The player works: real video, title, transport controls, progress. |
+| ~~**joinery-configurator**~~ | **Done — clean.** Colour selection works in both modes (Aluminium inside/outside, and the single PVC colour set), so the by-name material resolution survived. Product types, profile material and model, all design types, and the frame sliders all drive the model. Zero console errors. |
+| ~~**stairs-generator**~~ | **Done — clean.** All five sliders driven to both extremes; the geometry rebuilds every time and stays coherent at the limits (6 m rise, 0.3 m steps, 0.1 m run → 72°, landing intact). Flight count, all four directions, and Reset work. Keyboard focus ring is visible on the sliders. |
+| ~~**canvas-studio**~~ | **Done.** The t-shirt designer was unstyled (its stylesheet was an empty file); it has a proper UI now. Checked at 375 px: no sideways scroll, `fit.js` scales it 0.56, and Fabric's pointer mapping through the transform still lands. The other eight pages in that demo are untouched and still plain. |
 
 ### 11. ANSWER THE FOUR OPEN QUESTIONS — free · 20 min
 
@@ -162,10 +159,15 @@ deleting before you share the link.
 | orbital-slice | Is the black hole's `attractionForce` a real per-frame pull, or a scripted tween? It is the most distinctive mechanic and I could not tell from `rip.ts`. |
 | tv-course-browser | Was the LG webOS build the same codebase? The repo has `useWebOsHistory` and `useTizenHistory` side by side — if it is one app targeting two platforms, that is a stronger claim than "a Tizen app". |
 
-### 12. ADD YOUR CV — free · 5 min
+### 12. ~~ADD YOUR CV~~ — done
 
-Drop `cv.pdf` into `site/public/`. The masthead link detects it and turns itself on;
-until then it renders struck through and disabled rather than 404ing.
+`Tyshkovets_Pavlo_Frontend_3D_Web_Developer.pdf` is in `site/public/cv.pdf`, and the
+masthead link has turned itself on.
+
+**One thing to decide before you deploy:** the CV carries your phone number, and
+`/cv.pdf` will be public and crawlable. If you would rather not have a mobile number
+indexed, swap in a version that leaves it out — email and LinkedIn are already on the
+page anyway.
 
 ### 13. DECIDE TWO THINGS I LEFT ALONE — free · 10 min
 
