@@ -1,51 +1,54 @@
-# Poster capture — needs you
+# Poster capture
 
-Every demo has a `poster.webp` at 1600×900, and **all six are placeholders**. They are
-typographic cards, not screenshots, and each carries a "PLACEHOLDER — REPLACE WITH
-SCREENSHOT" chip so one can never ship by accident.
+Every demo has a `poster.webp` at 1600x900. **All six are real screenshots**, captured
+from the built demos and reproducible with the two scripts in `tools/`.
 
-## Why I couldn't capture them
+Set `"posterIsPlaceholder": false` in a demo's `meta.json` when its poster is real —
+that flag drives the amber banner on the index card. All six are `false` today.
 
-The browser pane available to me does not composite — measured at 0 `requestAnimationFrame`
-callbacks per second with `document.hidden === true`. Every one of these demos draws
-through rAF (WebGL, Phaser, canvas 2D), so there is no frame to capture. Layout,
-network and DOM state I can read; pixels I cannot.
+## Reshooting
 
-## How to capture
-
-Serve the built demos and grab a frame at exactly 1600×900:
+Serve the built site, then run the capture and the conversion:
 
 ```bash
-npx --yes http-server E:/Work/Personal/PORTFOLIO/demos -p 8123 -c-1
+npx --yes http-server dist -p 4173 -c-1
 ```
-
-In Chrome: DevTools → ⋮ → **More tools → Rendering**, then Ctrl+Shift+M (device
-toolbar), set a custom size of **1600 × 900**, and use the DevTools command menu
-(Ctrl+Shift+P) → **Capture screenshot**. That gives you an exact-size PNG with no
-browser chrome.
-
-Then convert and drop it in place:
 
 ```bash
-npx --yes sharp-cli -i shot.png -o E:/Work/Personal/PORTFOLIO/demos/<slug>/poster.webp resize 1600 900 --fit cover
+node tools/capture-posters.mjs orbital-slice canvas-studio
 ```
 
-Finally set `"posterIsPlaceholder": false` in that demo's `meta.json` — the index site
-reads that flag, so leaving it true is a visible reminder rather than a silent lie.
+```bash
+node tools/posterize.mjs
+```
 
-## The frame to capture, per demo
+`capture-posters.mjs` launches the installed Chrome with a throwaway profile and drives
+it over the DevTools protocol using Node's built-in `WebSocket` — no puppeteer, no
+downloaded browser. It is headful on purpose: the three 3D demos want the real GPU, and
+`Emulation.setDeviceMetricsOverride` pins the capture to exactly 1600x900 regardless of
+the window on screen. PNGs land in `tools/shots/`.
 
-| Demo | What to put on screen |
+`posterize.mjs` picks the chosen frame per demo (see `PICKS` at the top of the file),
+and writes all three files each demo needs: `demos/<slug>/poster.webp`,
+`site/public/posters/<slug>.webp`, and the 800px `@800.webp` for the srcset.
+
+An earlier note here said the frames had to be captured by hand because the browser
+could not composite. That was true of one particular browser pane; CDP against real
+Chrome renders and screenshots normally, WebGL included.
+
+## The frame each demo is set up to capture
+
+| Demo | What the recipe puts on screen |
 |---|---|
 | **joinery-configurator** | A front door, three-quarter view, dark profile against the light backdrop, control panel visible on the right. The panel is what says "configurator" rather than "3D viewer" — don't crop it out. |
-| **stairs-generator** | Two flights with a quarter-turn landing — set flight count to 2 and pick a direction change. A straight single flight looks like a stock model; the switchback is the thing that proves it's solved rather than authored. |
-| **boat-configurator** | Hull at three-quarter, a large outboard fitted, an interior colour that isn't the default graphite. Use "Full view" so the whole boat is in frame. |
-| **orbital-slice** | Mid-run, mid-swipe: the blade trail visible across two or three planets with a slice in progress. Not the menu, not game-over. This is the hardest one to time — take a burst and pick. |
-| **canvas-studio** | The t-shirt designer with the sample artwork placed and a shape or two added, selection handles showing. The handles are the visual cue that it's interactive. |
-| **tv-course-browser** | The home screen with the hero carousel and a course row, **with a card focused** so the focus ring is visible. The focus ring is the entire story of this demo. |
+| **stairs-generator** | Two flights with a quarter-turn landing. The camera orbits four steps round on purpose: looking along the L flattens it into a straight run, and the turn is what proves the geometry is solved rather than authored. |
+| **boat-configurator** | Hull at three-quarter with the 250–300 hp V8 fitted, interior off the default graphite, "Full view" so the whole boat is in frame. |
+| **orbital-slice** | Mid-run, mid-swipe. The laser trail has a 150 ms particle lifespan, so a one-shot swipe is gone before the capture completes — the recipe leaves a rAF loop running that chases whatever planet is on screen, and takes a burst of six. Frame 4 is the one in use. |
+| **canvas-studio** | The t-shirt designer with sample artwork placed and a circle added, left selected. The selection handles are the cue that it is a live canvas. |
+| **tv-course-browser** | The home screen, arrowed down into a course row so a card carries the focus ring, then nudged back up so the hero carousel dots stay in frame. The focus ring is the entire story of this demo. |
 
-## Also needed: the Open Graph share image
+## Still a placeholder: nothing
 
-Phase 5 wants one, 1200×630, for the index page. It should be the portfolio as a whole,
-not one demo — your name, the one-line description, and probably a strip of two or three
-demo posters. I'll generate a placeholder for it with the site build; same rule applies.
+`site/public/og.png` (1200x630, the link-preview card) is a typographic card rather than
+a screenshot, but that is a design choice, not an unfinished one — it represents the
+portfolio as a whole. Worth revisiting only if you want a strip of demo posters on it.

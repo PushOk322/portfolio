@@ -30,3 +30,6 @@ Thumbs.db
 TEMP/
 temp.html
 *.log
+
+# Intermediate poster captures; the committed artefacts are the .webp files.
+tools/shots/
