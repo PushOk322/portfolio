@@ -7,6 +7,7 @@
   "scripts": {
     "build": "node build.mjs",
     "build:fast": "node build.mjs --no-install",
-    "preview": "npx --yes http-server dist -p 4173 -c-1"
+    "preview": "npx --yes http-server dist -p 4173 -c-1",
+    "deploy:pages": "node tools/publish-pages.mjs"
   }
 }
