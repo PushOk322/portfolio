@@ -13,6 +13,39 @@ pushed. Item 3 below is struck through; the rest still stand.
 
 ## Getting it online
 
+### 0. TURN ON GITHUB PAGES — free · 1 min · **the only step between you and a live link**
+
+The built site is already pushed to the `gh-pages` branch. GitHub just needs telling
+to serve it:
+
+**Repo → Settings → Pages → Build and deployment → Source: _Deploy from a branch_ →
+Branch: `gh-pages` / `(root)` → Save.**
+
+A minute later it is live at **https://pushok322.github.io/portfolio/**
+
+No domain, no card, no token. Items 1–8 below are the custom-domain deploy and can
+wait as long as you like — nothing here blocks them, and the two can run side by side.
+
+To republish after any change:
+
+```bash
+npm run deploy:pages
+```
+
+That rebuilds the site with `SITE_BASE=/portfolio/` — a Pages project site lives under
+`/<repo>/`, not at the domain root — and force-pushes the result. Add `--full` if a
+demo changed and needs rebuilding too:
+
+```bash
+node tools/publish-pages.mjs --full
+```
+
+`gh-pages` is build output only. Don't edit it by hand; it is replaced wholesale on
+every publish.
+
+---
+
+
 ### 1. BUY THE DOMAIN — ~$12–15/year · 10 min
 
 `pavlotyshkovets.dev` if it is free. `.dev` is on the HSTS preload list, so it is
@@ -91,14 +124,20 @@ change both if you name it differently).
 
 ### 7. SET THE REAL DOMAIN IN THE BUILD — free · 2 min
 
-Open `site/scripts/build-pages.mjs` and change one line:
+`origin` is read from the environment now, so nothing in the file needs editing —
+set it at build time:
 
-```js
-origin: 'https://example.invalid'   →   origin: 'https://pavlotyshkovets.dev'
+```bash
+SITE_ORIGIN=https://pavlotyshkovets.dev npm run build
 ```
 
-That value fills `og:url`, `og:image` and `<link rel="canonical">` on all seven
-pages. Left as it is, a link pasted into LinkedIn or Slack shows no preview image.
+It fills `og:url`, `og:image` and `<link rel="canonical">` on all seven pages. Left
+unset it falls back to `https://example.invalid`, and a link pasted into LinkedIn or
+Slack shows no preview image. On Cloudflare, set `SITE_ORIGIN` as a build environment
+variable in the Pages project alongside `NODE_VERSION`.
+
+Leave `SITE_BASE` unset for a custom domain — the site builds for a domain root by
+default, and only the GitHub Pages publish overrides it.
 
 ### 8. ADD THE CUSTOM DOMAIN — free · 10 min + propagation
 
