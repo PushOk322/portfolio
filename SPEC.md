@@ -52,8 +52,8 @@ locally. The six demos are ordinary directories inside it, not submodules and no
 subtrees.
 
 ```
-commit 6b45bef  main   923 files   .git = 51 MB
-remote origin   github-personal:PushOk322/portfolio.git   (never pushed)
+main   956 files   .git = 52 MB
+remote origin   github-personal:PushOk322/portfolio.git   (live)
 ```
 
 ### Nothing from the originals came with them
@@ -133,18 +133,11 @@ generated HTML pages, and — belt and braces — `.env`, `*.pem`, `*.key`. No d
 secret to protect; the rule is there so that if one ever appears it does not get
 committed by reflex.
 
-### First push
+### Remote
 
-The remote is set. The repository does not exist on GitHub yet — creating it needs
-your account, so it is item 3 in `ACTIONS_FOR_PASHA.md`. Once it exists:
-
-```bash
-cd E:/Work/Personal/PORTFOLIO
-git push -u origin main
-```
-
-`github-personal` resolves through your `~/.ssh/config` to `github.com` using
-`id_ed25519`, which keeps this off the `github-work` key entirely.
+`github-personal:PushOk322/portfolio.git`, which resolves through `~/.ssh/config` to
+`github.com` on `id_ed25519` — deliberately not the `github-work` key. Pushed and
+tracking `origin/main`.
 
 ### Day-to-day
 

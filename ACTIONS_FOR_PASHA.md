@@ -6,9 +6,8 @@ your memory, or your judgement.
 Items 1–8 are the deploy, in order. Items 9–13 make the portfolio honest before
 anyone reads it.
 
-The git repo is already created and committed locally — `main`, one commit, remote
-set to `github-personal:PushOk322/portfolio.git`. **Nothing has been pushed**, because
-the repository does not exist on GitHub yet and creating it needs your account.
+**Done:** the repo is live at `github-personal:PushOk322/portfolio.git` and `main` is
+pushed. Item 3 below is struck through; the rest still stand.
 
 ---
 
@@ -29,16 +28,12 @@ does not sell the TLD.
 The free plan covers everything here: unlimited bandwidth, 500 builds a month,
 instant rollback. Turn on 2FA while you are in there.
 
-### 3. CREATE THE GITHUB REPO AND PUSH — free · 5 min
+### 3. ~~CREATE THE GITHUB REPO AND PUSH~~ — done
 
-On GitHub, create an **empty** repository named `portfolio` under your personal
-account — no README, no `.gitignore`, no licence, or the first push will conflict.
-
-Everything local is already done. One command:
+Live and tracking `origin/main`. From here it is the ordinary loop:
 
 ```bash
-cd E:/Work/Personal/PORTFOLIO
-git push -u origin main
+git add -A && git commit -m "..." && git push
 ```
 
 The remote is `github-personal:PushOk322/portfolio.git`, which resolves through your
