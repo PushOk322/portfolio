@@ -1,0 +1,118 @@
+<!--
+  ============================================================================
+  Modified portfolio build. Client branding, proprietary data, and backend
+  integrations have been removed or replaced with mock data. Not the production
+  application. Source structure preserved for demonstration purposes only.
+  ============================================================================
+  Canvas Studio — 2D canvas experiments built at Avada Media.
+  Showcase build; see DEMO_NOTICE.md.
+
+  The Fabric.js canvas below is the original 600x312 surface and the script
+  still binds every control by the same id. Everything around it is chrome.
+-->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8"/>
+    <meta
+            name="viewport"
+            content="width=device-width, initial-scale=1.0"
+    />
+    <title>T-shirt designer — Canvas Studio</title>
+    <!-- After normalize: it sets `color: #fff` and turns <body> into a centred
+         flex column for the other eight pages. This one lays itself out. -->
+  <script type="module" crossorigin src="./assets/index-C3X-7JcB.js"></script>
+  <link rel="modulepreload" crossorigin href="./assets/badge-oBF7KFvc.js">
+  <link rel="stylesheet" crossorigin href="./assets/badge-CiqWJDhq.css">
+  <link rel="stylesheet" crossorigin href="./assets/index-DkB884fs.css">
+</head>
+<body data-pf-badge-text="Portfolio build" data-pf-badge-back="../../">
+
+<main class="ts">
+    <header class="ts__head">
+        <p class="ts__eyebrow">Print spec</p>
+        <h1 class="ts__title">T-shirt designer</h1>
+        <p class="ts__deck">Drop artwork on the garment, arrange it, and pull a proof.</p>
+
+        <dl class="ts__spec">
+            <div class="ts__spec-row"><dt>Library</dt>
+                <dd>Fabric.js</dd>
+            </div>
+            <div class="ts__spec-row"><dt>Surface</dt>
+                <dd>600 &times; 312</dd>
+            </div>
+            <div class="ts__spec-row"><dt>Proof</dt>
+                <dd>JPEG</dd>
+            </div>
+        </dl>
+    </header>
+
+    <div class="ts__body">
+        <section class="stage" aria-label="Garment">
+            <div class="stage__mount">
+                <canvas id="myCanvas"></canvas>
+            </div>
+
+            <p class="stage__legend">
+                <span>Front</span>
+                <span>Back</span>
+            </p>
+
+            <!-- Signature: what the press would actually have to do. One screen per
+                 distinct ink; a raster image can't be spot-printed, so it books the
+                 four process screens. Rendered from canvas state, not from a count
+                 kept on the side. -->
+            <section class="sep" aria-live="polite">
+                <h2 class="sep__title">Separation</h2>
+                <p class="sep__empty" id="sepEmpty">Nothing on the garment yet.</p>
+                <ul class="sep__chips" id="sepChips"></ul>
+                <p class="sep__count" hidden id="sepTally">
+                    <span class="sep__num" id="sepCount">0</span>
+                    <span class="sep__unit" id="sepUnit">screens</span>
+                </p>
+            </section>
+        </section>
+
+        <aside class="rail" aria-label="Tools">
+            <section class="rail__group">
+                <h2 class="rail__title">Artwork</h2>
+                <label class="btn btn--file">
+                    <span>Upload image</span>
+                    <input type="file" id="imageUpload" accept="image/*"/>
+                </label>
+                <button class="btn" id="sampleButton">Add sample artwork</button>
+            </section>
+
+            <section class="rail__group">
+                <h2 class="rail__title">Type</h2>
+                <input class="field" type="text" id="textInput" placeholder="Set some text"
+                       aria-label="Text to place on the garment"/>
+                <button class="btn" id="textButton" disabled>Add text</button>
+            </section>
+
+            <section class="rail__group">
+                <h2 class="rail__title">Shapes</h2>
+                <div class="rail__shapes">
+                    <button class="btn btn--shape" id="triangleButton">
+                        <span class="ink" style="--ink-chip:green"></span>Triangle
+                    </button>
+                    <button class="btn btn--shape" id="rectangleButton">
+                        <span class="ink" style="--ink-chip:blue"></span>Rectangle
+                    </button>
+                    <button class="btn btn--shape" id="circleButton">
+                        <span class="ink" style="--ink-chip:red"></span>Circle
+                    </button>
+                </div>
+            </section>
+
+            <section class="rail__group rail__group--end">
+                <h2 class="rail__title">Finish</h2>
+                <button class="btn btn--danger" id="deleter">Select an object first</button>
+                <button class="btn btn--press" id="downloadButton">Download proof</button>
+            </section>
+        </aside>
+    </div>
+</main>
+
+</body>
+</html>

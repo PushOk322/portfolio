@@ -1,0 +1,101 @@
+<!--
+  ============================================================================
+  Modified portfolio build. Client branding, proprietary data, and backend
+  integrations have been removed or replaced with mock data. Not the production
+  application. Source structure preserved for demonstration purposes only.
+  ============================================================================
+  Stairs Generator — built at Marevo Vision. Showcase build; see DEMO_NOTICE.md.
+-->
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Stairs Generator</title>
+  <meta name="author" content="Pavlo Tyshkovets" />
+  <meta name="description" content="Procedural 3D staircase configurator — five parameters assemble the geometry at runtime. Portfolio showcase build." />
+  <link href="./css/styles.css" rel="stylesheet" />
+  <link href="./portfolio/badge.css" rel="stylesheet" />
+</head>
+
+<body data-pf-badge-text="Portfolio build" data-pf-badge-back="../../">
+  <main class="app">
+    <div class="viewport" data-pf-badge-anchor>
+      <canvas class="viewport__canvas" id="scene-canvas"></canvas>
+
+      <div class="loader" id="js-loader" role="status" aria-live="polite" aria-label="Loading">
+        <span class="loader__spinner" aria-hidden="true"></span>
+      </div>
+
+      <div class="viewport-actions">
+        <button class="viewport-action" type="button" data-action="ar" aria-haspopup="dialog"
+          aria-expanded="false" aria-controls="ar-popup" disabled>View in AR</button>
+        <button class="viewport-action" type="button" data-action="share" aria-haspopup="dialog"
+          aria-expanded="false" aria-controls="share-popup">Share</button>
+        <button class="viewport-action" type="button" data-action="reset">Reset</button>
+      </div>
+
+      <div class="share-overlay" hidden data-share-overlay>
+        <section class="share-popup" id="share-popup" role="dialog" aria-modal="true"
+          aria-labelledby="share-title">
+          <h2 class="share-popup__title" id="share-title">Share this staircase</h2>
+          <div class="share-popup__field">
+            <input class="share-popup__link" type="text" readonly aria-label="Shareable link" data-share-link />
+            <button class="share-popup__copy" type="button" data-share-copy>Copy</button>
+          </div>
+          <button class="share-popup__close" type="button" data-share-close aria-label="Close">×</button>
+        </section>
+      </div>
+
+      <div class="share-overlay" hidden data-ar-overlay>
+        <section class="share-popup ar-popup" id="ar-popup" role="dialog" aria-modal="true"
+          aria-labelledby="ar-title">
+          <h2 class="share-popup__title" id="ar-title">Scan to view in AR</h2>
+          <p class="ar-popup__text">Point your phone camera at this code to place the staircase
+            in your room. Desktop browsers can't open AR directly.</p>
+          <img class="ar-popup__qr" alt="QR code linking to this staircase in AR" data-ar-qr />
+          <button class="share-popup__close" type="button" data-ar-close aria-label="Close">×</button>
+        </section>
+      </div>
+
+      <!-- Hidden AR surface: ar-controller feeds it an exported GLB and calls activateAR().
+           Kept present (not display:none) so it can initialise; visually parked offscreen.
+           loading="eager" is mandatory: the default "auto" lazy-loads via IntersectionObserver,
+           and an element parked at left:-9999px never intersects, so the model would never load
+           and the 'load' event (which openAR awaits) would never fire — hanging both the QR and
+           the phone activateAR() paths. -->
+      <!-- scene-viewer leads ar-modes: its floor-plane detection is steadier than WebXR's,
+           whose reticle can latch onto a wall before the tap-to-place. ar-scale="fixed" pins the
+           staircase to its true metre scale (no auto-resize); ar-placement="floor" is the default
+           but stated so it can never be read as wall. -->
+      <model-viewer class="ar-viewer" id="ar-viewer" loading="eager" ar
+        ar-modes="scene-viewer webxr quick-look" ar-scale="fixed" ar-placement="floor"
+        camera-controls disable-zoom shadow-intensity="0" alt="Staircase model"></model-viewer>
+    </div>
+
+    <aside class="sidebar" aria-label="Staircase controls">
+      <div class="sidebar__bar">
+        <h1 class="sidebar__title">Stairs Generator</h1>
+        <button class="sidebar__toggle" type="button" data-drawer-toggle aria-expanded="false"
+          aria-controls="controls-mount">Controls</button>
+      </div>
+      <div class="sidebar__controls" id="controls-mount"></div>
+    </aside>
+  </main>
+
+  <script type="importmap">
+    {
+      "imports": {
+        "three": "./js/libs/three.0.183.2/build/three.module.min.js",
+        "three/addons/": "./js/libs/three.0.183.2/examples/jsm/"
+      }
+    }
+  </script>
+  <!-- Local model-viewer bundle (no CDN); it registers the <model-viewer> element. -->
+  <script src="./js/libs/model-viewer/model-viewer.min.js" type="module"></script>
+  <script src="./js/main.js" type="module"></script>
+  <script src="./portfolio/badge.js" type="module"></script>
+</body>
+
+</html>

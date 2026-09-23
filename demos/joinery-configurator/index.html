@@ -1,0 +1,482 @@
+<!--
+  ============================================================================
+  Modified portfolio build. Client branding, proprietary data, and backend
+  integrations have been removed or replaced with mock data. Not the production
+  application. Source structure preserved for demonstration purposes only.
+  ============================================================================
+  Joinery Configurator — built at Marevo Vision. Showcase build; see DEMO_NOTICE.md.
+-->
+<!DOCTYPE html>
+
+<html lang="en">
+
+<head>
+  <meta charset="utf-8" />
+  <meta content="width=device-width, initial-scale=1.0" name="viewport" />
+  <title>Joinery Windows/Doors</title>
+  <meta content="Marevo 3D Product Configurator." name="description" />
+  <meta content="Pavlo Tyshkovets" name="author" />
+  <link href="./src/index/favicon.ico" rel="shortcut icon" />
+  <link href="./css/rubik.css" rel="stylesheet" />
+  <link href="./css/styles.css" rel="stylesheet" />
+  <link href="./css/3d_ar.css" rel="stylesheet" />
+  <link href="./portfolio/badge.css" rel="stylesheet" />
+</head>
+
+<body data-pf-badge-text="Portfolio build" data-pf-badge-back="../../">
+  <div class="product-type-3dmodel">
+    <div class="ar_conf_container">
+      <!-- ── 3D viewport ───────────────────────────────────────────────────── -->
+      <div class="ar_model_viewer" id="ar_model_viewer" data-pf-badge-anchor>
+        <canvas class="ar_model_view" data-engine="three.js r146" id="ar_model_view" style="
+              touch-action: none;
+              width: 100%;
+              height: 100%;
+              display: block;
+            ">
+        </canvas>
+        <div class="loading" id="js-loader">
+          <div class="marevo_loader">
+            <div class="marevo_loader__spinner">
+              <div class="marevo_loader__circle circle1"></div>
+              <div class="marevo_loader__circle circle2"></div>
+              <div class="marevo_loader__circle circle3"></div>
+              <div class="marevo_loader__circle circle4"></div>
+              <div class="marevo_loader__circle circle5"></div>
+            </div>
+            <div class="marevo_loader__text">Configurator loading...</div>
+            <div class="marevo_loader__progress" id="js-loader-progress" role="status"
+              aria-live="polite"></div>
+          </div>
+        </div>
+        <!-- AR spinner -->
+        <div id="ar-spinner" style="
+              display: none;
+              position: absolute;
+              inset: 0;
+              border-radius: 56px;
+              background: rgba(255, 255, 255, 0.75);
+              justify-content: center;
+              align-items: center;
+            ">
+          <svg height="22" style="animation: arSpin 0.8s linear infinite" viewbox="0 0 22 22" width="22">
+            <circle cx="11" cy="11" fill="none" r="9" stroke="#121c0c" stroke-dasharray="42 14" stroke-width="2.5">
+            </circle>
+          </svg>
+        </div>
+        <style>
+          @keyframes arSpin {
+            to {
+              transform: rotate(360deg);
+            }
+          }
+        </style>
+        <!-- Door open/close animation button — hidden for windows via VISIBILITY_RULES -->
+        <!-- <div id="group-window-anim" class="option-group">
+          <button id="window-btn-anim-open-all" class="btn">Open / Close</button>
+        </div> -->
+        <!-- Window Animation Controls -->
+        <div id="group-door-anim">
+          <button aria-label="Tilt windows" class="wdw-window-btn wdw-window-btn-anim vertical" id="window-btn-anim-vertical" type="button">
+            <img alt="" src="" />
+          </button>
+          <button aria-label="Open or turn windows and doors" class="wdw-window-btn wdw-window-btn-anim horizontal" id="window-btn-anim-horizontal" type="button">
+            <img alt="" src="" />
+          </button>
+        </div>
+        <div class="wdw-window-btn wdw-window-btn-hider">
+          <img alt="FullScreen" src="" />
+        </div>
+      </div>
+      <!-- /ar_model_viewer -->
+      <!-- ── Sidebar controls ──────────────────────────────────────────────── -->
+      <div class="summary_container">
+        <div class="summary_wrapper">
+          <div class="summary_wrapper_inner">
+            <div class="summary entry-summary">
+              <h1 class="product_title entry-title">3D configurator</h1>
+              <div class="custom-controls">
+                <!-- ════════════════════════════════════════════════════════════
+                     SHARED CONTROLS
+                     Visible for both doors and windows.
+                ════════════════════════════════════════════════════════════ -->
+                <!-- Product category -->
+                <div class="option-group" id="group-product-category"><label>Product type</label>
+                  <div class="option-group-container">
+
+                    <button class="btn product-category-btn" data-value="doors">Door</button>
+                    <button class="btn product-category-btn" data-value="windows">Window</button>
+                    <button class="btn product-category-btn" data-value="backDoors">Back door</button>
+                  </div>
+                </div>
+                <!-- Profile material -->
+                <div class="option-group" id="group-profile-material"><label>Profile material</label>
+                  <div class="option-group-container">
+
+                    <button class="btn profile-material-btn" data-value="pvc">PVC</button>
+                    <button class="btn profile-material-btn" data-value="alum">Aluminium</button>
+                  </div>
+                </div>
+                <!-- Profile model (PVC only — hidden for alum via VISIBILITY_RULES) -->
+                <div class="option-group" id="group-profile-model"><label>Profile model</label>
+                  <div class="option-group-container">
+
+                    <button class="btn profile-model-btn" data-value="70">70</button>
+                    <button class="btn profile-model-btn" data-value="120">120</button>
+                  </div>
+                </div>
+                <!-- Frame dimensions — shared -->
+                <div class="control-range">
+                  <label for="control-width">Frame width</label>
+                  <input id="control-width" min="0.4" max="3.5" step="0.01" type="range" value="0" />
+                  <output id="control-width-value">0</output>
+                </div>
+                <div class="control-range">
+                  <label for="control-height">Frame height</label>
+                  <input id="control-height" min="0.286" max="2.82" step="0.01" type="range" value="0" />
+                  <output id="control-height-value">0</output>
+                </div>
+
+                <!-- <div class="control-range">
+                  <label for="control-width">Frame width</label>
+                  <input id="control-width" min="0.8" max="1.2" step="0.01" type="range" value="0" />
+                  <output id="control-width-value">0</output>
+                </div>
+                <div class="control-range">
+                  <label for="control-height">Frame height</label>
+                  <input id="control-height" min="1.8" max="2.4" step="0.01" type="range" value="0" />
+                  <output id="control-height-value">0</output>
+                </div> -->
+                <!-- Colors — alum: separate inside + outside -->
+                <div class="group-color-alum option-group"><label>Color inside</label>
+                  <div class="option-group-container">
+
+                    <div class="control-button group">
+                      <button class="btn-color _1 inside-color-btn" data-value="#454d52"></button>
+                      <button class="btn-color _2 inside-color-btn" data-value="#303030"></button>
+                      <button class="btn-color _3 inside-color-btn" data-value="#f7fbf5"></button>
+                    </div>
+                    <!-- <input type="color" id="control-color-inside" value="#ffffff" /> -->
+                  </div>
+                </div>
+                <div class="group-color-alum option-group"><label>Color outside</label>
+                  <div class="option-group-container">
+
+                    <div class="control-button group">
+                      <button class="btn-color _1 outside-color-btn" data-value="#454d52"></button>
+                      <button class="btn-color _2 outside-color-btn" data-value="#303030"></button>
+                      <button class="btn-color _3 outside-color-btn" data-value="#f7fbf5"></button>
+                    </div>
+                    <!-- <input type="color" id="control-color-outside" value="#ffffff" /> -->
+                  </div>
+                </div>
+                <!-- Colors — PVC: single unified color -->
+                <div class="group-color-pvc option-group"><label>PVC color</label>
+                  <div class="option-group-container">
+
+                    <div class="control-button group">
+                      <button class="btn-color _1 pvc-color-btn" data-value="#454d52"></button>
+                      <button class="btn-color _2 pvc-color-btn" data-value="#303030"></button>
+                      <button class="btn-color _3 pvc-color-btn" data-value="#f7fbf5"></button>
+                    </div>
+                    <!-- <input type="color" id="control-color-pvc" value="#ffffff" /> -->
+                  </div>
+                </div>
+                <!-- ════════════════════════════════════════════════════════════
+                     DOOR-ONLY CONTROLS
+                     Hidden when productCategory === 'windows' via VISIBILITY_RULES.
+                ════════════════════════════════════════════════════════════ -->
+                <!-- Design type -->
+                <div class="option-group" id="group-design-type"><label>Design type</label>
+                  <div class="option-group-container">
+
+                    <!-- Labels are placeholders — Joinery's real catalogue names
+                         are still outstanding (see requested-parameter-options.md §8). -->
+                    <button class="btn design-type-btn" data-value="1">Type 1</button>
+                    <button class="btn design-type-btn" data-value="2">Type 2</button>
+                    <button class="btn design-type-btn" data-value="2a">Type 2a</button>
+                    <button class="btn design-type-btn" data-value="3">Type 3</button>
+                    <button class="btn design-type-btn" data-value="4">Type 4</button>
+                    <button class="btn design-type-btn" data-value="5">Type 5</button>
+                    <button class="btn design-type-btn" data-value="6">Type 6</button>
+                    <button class="btn design-type-btn" data-value="7">Type 7</button>
+                    <button class="btn design-type-btn" data-value="8">Type 8</button>
+                    <button class="btn design-type-btn" data-value="9">Type 9</button>
+                    <button class="btn design-type-btn" data-value="10">Type 10</button>
+                    <button class="btn design-type-btn" data-value="11">Type 11</button>
+                    <button class="btn design-type-btn" data-value="12">Type 12</button>
+                    <button class="btn design-type-btn" data-value="13">Type 13</button>
+                    <button class="btn design-type-btn" data-value="14">Type 14</button>
+                    <button class="btn design-type-btn" data-value="15">Type 15</button>
+                    <button class="btn design-type-btn" data-value="16">Type 16</button>
+                    <button class="btn design-type-btn" data-value="17">Type 17</button>
+                    <button class="btn design-type-btn" data-value="18">Type 18</button>
+                    <button class="btn design-type-btn" data-value="19">Type 19</button>
+                    <button class="btn design-type-btn" data-value="20">Type 20</button>
+                    <button class="btn design-type-btn" data-value="21">Type 21</button>
+                    <button class="btn design-type-btn" data-value="22">Type 22</button>
+                    <button class="btn design-type-btn" data-value="23">Type 23</button>
+                  </div>
+                </div>
+
+                <div class="option-group" id="group-back-door-design"><label>Back door design</label>
+                  <div class="option-group-container">
+                    <button class="btn back-door-design-btn" data-value="1">Full glass</button>
+                    <button class="btn back-door-design-btn" data-value="2">Half glass</button>
+                  </div>
+                </div>
+
+                <div class="control-switch" id="group-transom-light">
+                  <label for="control-transom-light">Bovenlicht</label>
+                  <input type="checkbox" id="control-transom-light">
+                </div>
+                <!-- Design frame toggle -->
+                <div class="control-switch" id="group-design-frame">
+                  <label for="control-window-has-frame">Design Frame</label>
+                  <div class="switch">
+                    <span class="switch-label">Off</span>
+                    <input aria-checked="true" checked="" id="control-window-has-frame" role="switch" type="checkbox" />
+                    <span class="switch-label">On</span>
+                  </div>
+                </div>
+                <!-- Glass type toggle -->
+                <div class="control-switch" id="group-design-glass-type">
+                  <label for="control-window-glass-type">Glass type</label>
+                  <div class="switch">
+                    <span class="switch-label">Clear</span>
+                    <input aria-checked="false" id="control-window-glass-type" role="switch" type="checkbox" />
+                    <span class="switch-label">Blur</span>
+                  </div>
+                </div>
+                <!-- Hinges (door + alum only) -->
+                <div class="option-group" id="group-hinges"><label>Hinge type</label>
+                  <div class="option-group-container">
+
+                    <button class="btn hinge-btn" data-value="1">Designer</button>
+                    <button class="btn hinge-btn" data-value="2">Simple</button>
+                  </div>
+                </div>
+                <!-- Inside handle -->
+                <div class="option-group" id="group-handle-inside"><label>Inside handle</label>
+                  <div class="option-group-container">
+
+                    <button class="btn inside-handle-model-btn" data-value="1">1</button>
+                    <button class="btn inside-handle-model-btn" data-value="2">2</button>
+                  </div>
+                </div>
+                <!-- Outside handle -->
+                <div class="option-group" id="group-handle-outside"><label>Outside handle</label>
+                  <div class="option-group-container">
+
+                    <button class="btn outside-handle-model-btn" data-value="1">1</button>
+                    <button class="btn outside-handle-model-btn" data-value="2">2</button>
+                    <button class="btn outside-handle-model-btn" data-value="3">3</button>
+                  </div>
+                </div>
+                <!-- Door open side -->
+                <div class="control-switch" id="group-open-side">
+                  <label for="control-central-open">Door open side</label>
+                  <div class="switch">
+                    <span class="switch-label">Left</span>
+                    <input aria-checked="false" id="control-central-open" role="switch" type="checkbox" />
+                    <span class="switch-label">Right</span>
+                  </div>
+                </div>
+                <!-- <div class="control-switch" id="group-post">
+                  <label for="control-post">Post</label>
+                  <div class="switch">
+                    <span class="switch-label">Off</span>
+                    <input type="checkbox" id="control-post" role="switch" aria-checked="false" />
+                    <span class="switch-label">On</span>
+                  </div>
+                </div>
+
+                <div class="control-switch" id="group-ventilation">
+                  <label for="control-ventilation">Ventilation</label>
+                  <div class="switch">
+                    <span class="switch-label">Off</span>
+                    <input type="checkbox" id="control-ventilation" role="switch" aria-checked="false" />
+                    <span class="switch-label">On</span>
+                  </div>
+                </div> -->
+                <!-- ════════════════════════════════════════════════════════════
+                     WINDOW-ONLY CONTROLS
+                     Hidden when productCategory === 'doors' via VISIBILITY_RULES.
+                ════════════════════════════════════════════════════════════ -->
+                <!-- Section layout preset picker -->
+                <div class="option-group" id="group-section-layout"><label>Window layout</label>
+                  <div class="option-group-container">
+
+                    <button class="btn section-layout-btn" data-value="1x1">
+                      <span>1 section</span>
+                    </button>
+                    <button class="btn section-layout-btn" data-value="1x2">
+                      <span>2 side by side</span>
+                    </button>
+                    <button class="btn section-layout-btn" data-value="1x3">
+                      <span>3 side by side</span>
+                    </button>
+                    <button class="btn section-layout-btn" data-value="top_bottom">
+                      <span>Top + bottom</span>
+                    </button>
+                    <button class="btn section-layout-btn" data-value="top_2bottom">
+                      <span>Top + 2 bottom</span>
+                    </button>
+                    <button class="btn section-layout-btn" data-value="top_3bottom">
+                      <span>Top + 3 bottom</span>
+                    </button>
+                    <button class="btn section-layout-btn" data-value="2x1">
+                      <span>2 stacked</span>
+                    </button>
+                    <button class="btn section-layout-btn" data-value="1x4">
+                      <span>4 side by side</span>
+                    </button>
+                    <button class="btn section-layout-btn" data-value="3x1">
+                      <span>3 stacked</span>
+                    </button>
+                    <button class="btn section-layout-btn" data-value="mullionless_2">
+                      <span>2 mullionless</span>
+                    </button>
+                  </div>
+                </div>
+                <!-- Per-section opening type controls.
+                     This container is EMPTY on load.
+                     renderSectionControls() in ui-controller fills it dynamically
+                     based on how many sections the chosen layout has.
+                     Hidden entirely when layout has only 1 section. -->
+                <div class="option-group" id="group-section-opening-types">
+                  <!-- populated by renderSectionControls() -->
+                  <div class="option-group-container"></div>
+                </div>
+                <!-- Window handle model -->
+                <!-- <div class="option-group" id="group-window-handle"><label>Window handle</label>
+                  <div class="option-group-container">
+
+                    <button class="btn window-handle-btn" data-value="1">Model 1</button>
+                    <button class="btn window-handle-btn" data-value="2">Model 2</button>
+                    <button class="btn window-handle-btn" data-value="3">Model 3</button>
+                  </div>
+                </div> -->
+                <!-- <div class="option-group" id="group-window-handle-color"><label>Handle color</label>
+                  <div class="option-group-container">
+
+                    <button class="btn window-handle-color-btn" data-value="hc_chrome">Chrome</button>
+                    <button class="btn window-handle-color-btn" data-value="hc_standard_silver">Silver</button>
+                    <button class="btn window-handle-color-btn" data-value="hc_black">Black</button>
+                  </div>
+                </div>
+                <div class="option-group" id="group-grille"><label>Grille</label>
+                  <div class="option-group-container">
+
+                    <button class="btn grille-btn" data-value="none">None</button>
+                    <button class="btn grille-btn" data-value="2x2">2×2</button>
+                    <button class="btn grille-btn" data-value="3x3">3×3</button>
+                  </div>
+                </div> -->
+              </div>
+              <!-- /custom-controls -->
+              <div class="ar_filter" id="ar_filter">
+                <div class="ar_filter_toggle" id="ar_filter_toggle"></div>
+              </div>
+              <div class="ar_summary" style="display: none">
+                <div class="ar_summary_caption">Summary</div>
+                <div class="ar_summary_list"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="ar_buy_container"></div>
+      </div>
+      <!-- /summary_container -->
+    </div>
+    <!-- /ar_conf_container -->
+    <!-- ── AR model viewer (hidden, used for AR export) ──────────────────── -->
+    <model-viewer alt="Marevo_AR" ar="" ar-modes="webxr scene-viewer quick-look" ar-placement="wall" ar-scale="fixed"
+      auto-rotate="" camera-controls="" camera-orbit="-30deg auto auto" environment-image="neutral" exposure="1.0"
+      id="marevo_model" loading="eager" max-camera-orbit="auto 100deg auto" poster="" shadow-intensity="1"
+      shadow-softness="1" src="./src/models/empty_scene.glb" stage-light-intensity="1">
+      <div id="ar-prompt">
+        <img alt="" src="./src/ar-ui-icons/ar-hand.svg" />
+      </div>
+    </model-viewer>
+    <!-- ── Share / QR popup ──────────────────────────────────────────────── -->
+    <div class="wdw-info">
+      <div class="wdw-info-box">
+        <div class="wdw-info-item wdw-info-item-share" data-info-window="sharing" id="wdw-info-item-share">
+          <div class="wdw-info-sharing">
+            <div class="wdw-info-sharing-title">Share configuration</div>
+            <div class="wdw-info-sharing-window">
+              <input id="info-sharing-input" type="text" value="" />
+              <div class="wdw-info-sharing-ico">
+                <img alt="copy" src="" />
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="wdw-info-item wdw-info-item-qr" data-info-window="qr" id="wdw-info-item-qr">
+          <div class="wdw-qr">
+            <div class="wdw-qr-title" id="wdw-qr-title-ui">Scan to view in AR</div>
+            <div class="wdw-qr-text" id="wdw-qr-text-ui">
+              Open this QR code on your mobile device to launch augmented reality
+            </div>
+            <div class="wdw-qr-img" style="position: relative; min-height: 200px">
+              <div id="qr-spinner" style="
+                    display: none;
+                    position: absolute;
+                    inset: 0;
+                    justify-content: center;
+                    align-items: center;
+                    background: #fff;
+                  ">
+                <svg height="40" style="animation: arSpin 0.8s linear infinite" viewbox="0 0 40 40" width="40">
+                  <circle cx="20" cy="20" fill="none" r="16" stroke="#121c0c" stroke-dasharray="75 25" stroke-width="3">
+                  </circle>
+                </svg>
+              </div>
+              <div id="qrcode"></div>
+            </div>
+          </div>
+        </div>
+        <div class="wdw-info-item wdw-info-item-loupe" data-info-window="loupe" id="wdw-info-item-loupe">
+          <div class="wdw-loupe">
+            <div class="wdw-loupe-title" id="wdw-loupe-title-ui"></div>
+            <div class="wdw-loupe-text" id="wdw-loupe-text-ui"></div>
+            <div class="wdw-loupe-img">
+              <img alt="loupe" src="" />
+            </div>
+          </div>
+        </div>
+        <div class="wdw-info-close">
+          <img alt="close" src="" />
+        </div>
+      </div>
+      <div class="wdw-info-overlay"></div>
+    </div>
+  </div>
+  <!-- /product-type-3dmodel -->
+  <!-- jQuery -->
+  <script crossorigin="anonymous" integrity="sha256-2krYZKh//PcchRtd+H+VyyQoZ/e3EcrkxhM8ycwASPA="
+    src="./js/libs/jquery/jquery-3.6.2.min.js"></script>
+  <!-- Three.js v183 LOCAL -->
+  <script type="importmap">{
+    "imports": {
+      "three": "./js/libs/three.0.183.2/build/three.module.min.js",
+      "three/addons/": "./js/libs/three.0.183.2/examples/jsm/"
+    }
+  }</script>
+  <!-- GSAP -->
+  <script src="./js/libs/gsap.3.12.5/gsap.min.js"></script>
+  <script src="./js/3d-viewer.js" type="module"></script>
+  <script src="./js/3d-scene.js" type="module"></script>
+  <script src="./js/settings.js" type="module"></script>
+  <script src="./js/ui-controller.js" type="module"></script>
+  <!-- Exposes window.joinery for console-driven testing. Demo page only. -->
+  <script src="./js/dev-console.js" type="module"></script>
+  <!-- Model Viewer (AR) -->
+  <script src="./js/libs/model-viewer.4.1.0/model-viewer.min.js" type="module"></script>
+  <!-- DAT GUI -->
+  <script src="./js/libs/dat-gui.0.7.9/dat.gui.min.js"></script>
+  <script src="./portfolio/badge.js" type="module"></script>
+</body>
+
+</html>
