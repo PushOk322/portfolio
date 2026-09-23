@@ -2,6 +2,21 @@
   "slug": "canvas-studio",
   "title": "Canvas Studio",
   "tagline": "A product designer and three hand-drawn charts, straight off the 2D API.",
+  "track": "app",
+  "facts": [
+    [
+      "Role",
+      "Sole developer"
+    ],
+    [
+      "Scope",
+      "Fabric.js product designer, Konva builder, charts drawn on the raw 2D context"
+    ],
+    [
+      "Outcome",
+      "2D graphics course work, polished for this portfolio"
+    ]
+  ],
   "tags": [
     "Fabric.js",
     "Konva",

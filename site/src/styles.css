@@ -885,3 +885,109 @@ a {
 	font-size: 10.5px;
 	color: var(--ink-dim);
 }
+
+/* --- Hero actions and availability --------------------------------------- */
+
+.hero__actions {
+	display: flex;
+	flex-wrap: wrap;
+	gap: 12px;
+	margin: 36px 0 0;
+}
+
+.hero__actions .launch {
+	margin-top: 0;
+}
+
+.launch--ghost {
+	color: var(--ink);
+	background: transparent;
+	box-shadow: inset 0 0 0 1px var(--line-bright);
+}
+
+.launch--ghost:hover {
+	color: var(--ground);
+	background: var(--signal);
+	box-shadow: none;
+}
+
+.hero__status {
+	display: flex;
+	align-items: center;
+	gap: 10px;
+	margin: 22px 0 0;
+	font-family: var(--mono);
+	font-size: 12px;
+	letter-spacing: 0.04em;
+	color: var(--ink-mid);
+}
+
+.hero__dot {
+	flex: 0 0 auto;
+	width: 8px;
+	height: 8px;
+	border-radius: 50%;
+	background: #3ecf8e;
+	box-shadow: 0 0 0 3px color-mix(in srgb, #3ecf8e 25%, transparent);
+}
+
+/* --- Two tracks ------------------------------------------------------------ */
+
+.entries + .dim {
+	margin-top: clamp(48px, 7vw, 76px);
+}
+
+/* --- Card facts: role, scope, outcome -------------------------------------- */
+
+.facts {
+	display: grid;
+	grid-template-columns: max-content minmax(0, 1fr);
+	gap: 8px 18px;
+	width: 100%;
+	margin: 22px 0 0;
+	padding: 16px 0 0;
+	border-top: 1px solid var(--line);
+}
+
+.facts dt {
+	padding-top: 3px;
+	font-family: var(--mono);
+	font-size: 10.5px;
+	letter-spacing: 0.1em;
+	text-transform: uppercase;
+	color: var(--ink-dim);
+}
+
+.facts dd {
+	margin: 0;
+	font-size: 14.5px;
+	line-height: 1.5;
+	color: var(--ink);
+}
+
+@media (max-width: 560px) {
+	.facts {
+		grid-template-columns: minmax(0, 1fr);
+		gap: 2px 0;
+	}
+
+	.facts dd {
+		margin-bottom: 10px;
+	}
+}
+
+/* --- Live link on "Also shipped" cards ------------------------------------- */
+
+.also__link {
+	align-self: flex-start;
+	margin-top: 16px;
+	font-family: var(--mono);
+	font-size: 12px;
+	letter-spacing: 0.04em;
+	color: var(--signal);
+	text-decoration: none;
+}
+
+.also__link:hover {
+	text-decoration: underline;
+}

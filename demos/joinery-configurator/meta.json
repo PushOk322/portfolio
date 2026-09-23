@@ -1,7 +1,22 @@
 {
   "slug": "joinery-configurator",
-  "title": "Joinery Configurator",
+  "title": "Windows & Doors Configurator",
   "tagline": "Seven product families driven by one config object, in real-time 3D.",
+  "track": "3d",
+  "facts": [
+    [
+      "Role",
+      "Sole developer — all 100 commits"
+    ],
+    [
+      "Scope",
+      "Windows, doors and back doors on one config-driven architecture, AR, contract tests"
+    ],
+    [
+      "Outcome",
+      "Pitch prototype signed as a production project"
+    ]
+  ],
   "tags": [
     "Three.js",
     "WebXR",

@@ -111,16 +111,19 @@ pull request from a fork still builds and verifies without any access to yours.
 
 ### 6. CREATE THE PAGES PROJECT — free · 5 min
 
-Cloudflare dashboard → Workers & Pages → Create → Pages → **Connect to Git** → pick
-the repo. Name it **`portfolio`** (the workflow passes `--project-name=portfolio`;
-change both if you name it differently).
+**Do not use "Connect to Git".** `deploy.yml` already builds the site and uploads it
+with `wrangler pages deploy`. A Git-connected project would start a second, competing
+build on every push. Create the project as **Direct Upload** instead:
 
-| Setting | Value |
-|---|---|
-| Framework preset | None |
-| Build command | `npm run build` |
-| Build output directory | `dist` |
-| Environment variable | `NODE_VERSION` = `24` |
+Cloudflare dashboard → Workers & Pages → Create → Pages → **Upload assets** → name it
+**`portfolio`** (the workflow passes `--project-name=portfolio`) → upload any small
+placeholder folder to finish the wizard. The first push to `main` after items 4–5
+replaces it with the real site.
+
+Or from a terminal: `npx wrangler pages project create portfolio --production-branch=main`
+
+Because GitHub Actions does the build, `NODE_VERSION` is set by the workflow, not here.
+`SITE_ORIGIN` (item 7) goes into the workflow's build step as an env variable.
 
 ### 7. SET THE REAL DOMAIN IN THE BUILD — free · 2 min
 
@@ -185,7 +188,10 @@ what was actually found, in the original order of risk.
 | ~~**stairs-generator**~~ | **Done — clean.** All five sliders driven to both extremes; the geometry rebuilds every time and stays coherent at the limits (6 m rise, 0.3 m steps, 0.1 m run → 72°, landing intact). Flight count, all four directions, and Reset work. Keyboard focus ring is visible on the sliders. |
 | ~~**canvas-studio**~~ | **Done.** The t-shirt designer was unstyled (its stylesheet was an empty file); it has a proper UI now. Checked at 375 px: no sideways scroll, `fit.js` scales it 0.56, and Fabric's pointer mapping through the transform still lands. The other eight pages in that demo are untouched and still plain. |
 
-### 11. ANSWER THE FOUR OPEN QUESTIONS — free · 20 min
+### 11. ~~ANSWER THE FOUR OPEN QUESTIONS~~ — done
+
+All four answered and folded into the case studies; no `TODO(pasha)` notes remain.
+Kept below for the record.
 
 Four case studies carry an "Open question" note where I would have had to invent
 something. They render on the site as visible margin notes, so they need answering or
@@ -200,13 +206,8 @@ deleting before you share the link.
 
 ### 12. ~~ADD YOUR CV~~ — done
 
-`Tyshkovets_Pavlo_Frontend_3D_Web_Developer.pdf` is in `site/public/cv.pdf`, and the
-masthead link has turned itself on.
-
-**One thing to decide before you deploy:** the CV carries your phone number, and
-`/cv.pdf` will be public and crawlable. If you would rather not have a mobile number
-indexed, swap in a version that leaves it out — email and LinkedIn are already on the
-page anyway.
+`site/public/cv.pdf` is the Frontend Engineer CV **without the phone number**, since
+`/cv.pdf` is public and crawlable. The versions you send to employers keep the phone.
 
 ### 13. DECIDE TWO THINGS I LEFT ALONE — free · 10 min
 

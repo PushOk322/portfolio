@@ -2,10 +2,25 @@
   "slug": "orbital-slice",
   "title": "Orbital Slice",
   "tagline": "A swipe is a path, not a point — substepped slicing in Phaser 3.",
+  "track": "app",
+  "facts": [
+    [
+      "Role",
+      "Frontend developer — 536 of 895 commits"
+    ],
+    [
+      "Scope",
+      "Bonus mini-game inside a tap-to-earn Telegram Mini App, leaderboard, reward codes"
+    ],
+    [
+      "Outcome",
+      "Shipped to the game's players inside Telegram"
+    ]
+  ],
   "tags": [
     "Phaser 3",
     "TypeScript",
-    "Sprite atlases",
+    "Telegram Mini App",
     "Particles",
     "Vite"
   ],

@@ -2,12 +2,27 @@
   "slug": "tv-course-browser",
   "title": "TV Course Browser",
   "tagline": "The same React you know, with the mouse taken away.",
+  "track": "app",
+  "facts": [
+    [
+      "Role",
+      "Frontend developer — 115 of 214 commits"
+    ],
+    [
+      "Scope",
+      "One React codebase for Samsung Tizen and LG webOS, remote-only navigation"
+    ],
+    [
+      "Outcome",
+      "Lighthouse 62 → 95, major UI latency removed"
+    ]
+  ],
   "tags": [
     "React",
     "Tizen",
+    "webOS",
     "Spatial navigation",
-    "Zustand",
-    "webpack"
+    "Zustand"
   ],
   "accent": "#38bdf8",
   "poster": "poster.webp",

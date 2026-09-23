@@ -36,7 +36,7 @@ const BASE = (process.env.SITE_BASE || '/').replace(/\/*$/, '/');
 
 const PROFILE = {
 	name: 'Pavlo Tyshkovets',
-	role: 'Frontend developer — real-time 3D configurators',
+	role: 'Frontend developer — React, TypeScript and real-time 3D',
 	email: 'tishkovets.pavlo@gmail.com',
 	github: 'https://github.com/PushOk322',
 	linkedin: 'https://www.linkedin.com/in/pavlo-tyshkovets-5b5224251/',
@@ -64,15 +64,22 @@ const MEASURED = {
 	}
 };
 
-/* Display order. Deliberate, not alphabetical: the two strongest 3D pieces open,
-   the React+TS piece anchors the middle, and the lighter work closes. */
+/* Display order. Deliberate, not alphabetical: the strongest 3D pieces open, then
+   the app work. Within the page, demos are grouped by `track` in meta.json. */
 const ORDER = [
 	'joinery-configurator',
 	'stairs-generator',
 	'boat-configurator',
+	'tv-course-browser',
 	'orbital-slice',
-	'canvas-studio',
-	'tv-course-browser'
+	'canvas-studio'
+];
+
+/* Two tracks, so a recruiter hiring for plain React finds the app work without
+   scrolling past three configurators, and the reverse. */
+const TRACKS = [
+	{ id: '3d', label: '3D configurators' },
+	{ id: 'app', label: 'Apps & games' }
 ];
 
 const esc = (s) =>
@@ -213,6 +220,15 @@ function specBlock(slug) {
           </dl>`;
 }
 
+/* What a reader actually wants from a card: whose work it is, what it covers, and what
+   came of it. The measured payload figures now live on each demo's own page. */
+function factsBlock(demo) {
+	if (!Array.isArray(demo.facts) || !demo.facts.length) return specBlock(demo.slug);
+	return `<dl class="facts">
+${demo.facts.map(([k, v]) => `            <dt>${esc(k)}</dt><dd>${esc(v)}</dd>`).join('\n')}
+          </dl>`;
+}
+
 function entry(demo, index) {
 	const flag = demo.posterIsPlaceholder
 		? '<p class="entry__flag">Placeholder image — screenshot pending</p>'
@@ -235,7 +251,7 @@ function entry(demo, index) {
         <div class="entry__body">
           <h3 class="entry__title"><a href="${BASE}${demo.slug}.html">${esc(demo.title)}</a></h3>
           <p class="entry__tagline">${esc(demo.tagline)}</p>
-          ${specBlock(demo.slug)}
+          ${factsBlock(demo)}
           <ul class="tags">${demo.tags.map((t) => `<li>${esc(t)}</li>`).join('')}</ul>
           <a class="launch" href="${BASE}${demo.slug}.html">Open ${esc(demo.title)}
             <span class="launch__arrow" aria-hidden="true">→</span></a>
@@ -251,7 +267,12 @@ function mention(m) {
             <h3 class="also__title">${esc(m.title)}</h3>
             <p class="also__kind">${esc(m.kind)} · ${esc(m.commits)} commits mine</p>
             <p class="also__blurb">${esc(m.blurb)}</p>
-            <ul class="tags tags--quiet">${m.tech.map((t) => `<li>${esc(t)}</li>`).join('')}</ul>
+            <ul class="tags tags--quiet">${m.tech.map((t) => `<li>${esc(t)}</li>`).join('')}</ul>${
+							m.url
+								? `
+            <a class="also__link" href="${esc(m.url)}" target="_blank" rel="noopener noreferrer">${esc(m.linkLabel || 'Open live')} ↗</a>`
+								: ''
+						}
           </li>`;
 }
 
@@ -279,25 +300,42 @@ ${head({
         <p class="hero__eyebrow">${esc(PROFILE.role)}</p>
         <h1 class="hero__title">I build things you can drag, size and configure in a browser.</h1>
         <p class="hero__lede">
-          Six of them are on this page, running live — product configurators in Three.js,
-          a Phaser game, 2D canvas work, and an app built for a television remote.
-          Every figure below was measured on a real load.
+          Real-time 3D product configurators for manufacturers of windows, doors,
+          pergolas, bathrooms and houses — built in Three.js, React and TypeScript.
+          Around them: Telegram Mini Apps, Next.js storefronts and a Smart TV app.
+          Six run live on this page.
         </p>
         <dl class="hero__stats">
-          <div><dt>Demos</dt><dd>6</dd></div>
-          <div><dt>Commercial years</dt><dd>3.5</dd></div>
-          <div><dt>Third-party requests on load</dt><dd>0</dd></div>
+          <div><dt>Configurator projects</dt><dd>10+</dd></div>
+          <div><dt>Pitch prototypes signed</dt><dd>2 of 5</dd></div>
+          <div><dt>Commercial experience</dt><dd>3.5+ yrs</dd></div>
         </dl>
+        <div class="hero__actions">
+          <a class="launch" href="#work">See the demos <span class="launch__arrow" aria-hidden="true">↓</span></a>${
+						existsSync(join(SITE, 'public', 'cv.pdf'))
+							? `
+          <a class="launch launch--ghost" href="${BASE}cv.pdf">Download CV</a>`
+							: ''
+					}
+          <a class="launch launch--ghost" href="mailto:${PROFILE.email}">Email me</a>
+        </div>
+        <p class="hero__status"><span class="hero__dot" aria-hidden="true"></span>Open to remote Frontend and 3D roles · Poland, CET · B2B</p>
       </div>
     </section>
 
-    <section class="work" aria-labelledby="work-heading">
+    <section class="work" id="work" aria-labelledby="work-heading">
       <div class="shell">
         <h2 id="work-heading" class="visually-hidden">Selected work</h2>
-        ${dim('Selected work · 6 entries')}
+${TRACKS.map((t) => {
+	const list = demos.filter((d) => d.track === t.id);
+	if (!list.length) return '';
+	return `        ${dim(`${t.label} · ${list.length} ${list.length === 1 ? 'demo' : 'demos'}`)}
         <ul class="entries">
-${demos.map(entry).join('\n')}
-        </ul>
+${list.map((d) => entry(d, demos.indexOf(d))).join('\n')}
+        </ul>`;
+})
+	.filter(Boolean)
+	.join('\n')}
       </div>
     </section>
 
@@ -306,8 +344,9 @@ ${demos.map(entry).join('\n')}
         ${dim(`Also shipped · ${mentions.length} projects`)}
         <h2 id="also-heading" class="visually-hidden">Also shipped</h2>
         <p class="also__intro">
-          Not demoable here — most are behind a login, a client's domain, or a backend I
-          cannot take with me. Listed because the work is real.
+          Commercial work I can't embed here — it lives on a client's domain, behind a
+          login, or on a backend I can't take with me. Where the client's live version is
+          public, the card links to it.
         </p>
         <ul class="also__list">
 ${mentions.map(mention).join('\n')}
@@ -327,16 +366,18 @@ ${demos.map((d) => `              <li class="marks__item" title="${esc(d.title)}
           </div>
           <div class="about__body">
             <p>
-              I'm a frontend developer with three and a half years of commercial
-              experience, and my specialism is <strong>real-time 3D product
-              configurators</strong> — the kind where a customer sizes a product, changes
-              its finish, and sees the result before they buy. Several are in production.
+              I'm a frontend developer with 3.5+ years of commercial experience, and my
+              specialism is <strong>real-time 3D product configurators</strong> — the kind
+              where a customer sizes a product, changes its finish, and sees the result
+              before they buy. Several are in production. I'm usually the only developer on
+              a project, so I own it end to end: scene, UI, pricing data, e-commerce
+              embedding, AR and deployment.
             </p>
             <p>
-              Most of that work is Three.js, React and TypeScript. Around it I've shipped
-              a Phaser game inside a Telegram Mini App, an app for Samsung Tizen
-              televisions, Next.js storefronts, and 2D canvas work in Fabric.js. I own
-              deployments end to end: Linux, nginx, DNS, CDN, rsync.
+              Most of that work is Three.js, React and TypeScript. Around it I've shipped a
+              TRON energy-rental Telegram Mini App that is still live, a tap-to-earn
+              Telegram game, Next.js storefronts, and one React codebase for Samsung and LG
+              televisions. For a year I also mentored students on a React course.
             </p>
             <p>
               The demos here are modified builds. Client branding and proprietary data
@@ -421,6 +462,7 @@ for (const slug of ORDER) {
 	// The project's geometry mark, inlined rather than linked so it inherits colour
 	// from whatever it sits in.
 	meta.mark = await readFile(join(DEMOS, slug, 'icon.svg'), 'utf8');
+	if (!TRACKS.some((t) => t.id === meta.track)) meta.track = TRACKS[0].id;
 	demos.push(meta);
 }
 

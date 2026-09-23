@@ -29,12 +29,17 @@ in state. Redux holds the *choice*; an effect turns a choice into a method call.
 scene has no idea React exists, which is why swapping the server schema for a local
 catalogue in this build changed nothing below that line.
 
+## The cart rework
+
+The version-two launch was blocked by the cart. Every add threw the whole cart away and
+rebuilt it — state, derived prices, the API payload — so adding an item lagged, and
+several bugs came from that same rebuild racing itself. I changed it to insert into the
+existing structure and update only what the new item touched. The lag went away, the
+bug cluster went with it, and V2 shipped.
+
 ## What I'd do differently
 
 `BoatApplication` is a module-scoped singleton, and that decision propagates: React has
 to guard against StrictMode's double-invoke, and two configurators on one page are
 impossible. I would also stop addressing meshes by string name — `setColor('board', hex)`
 matches substrings and fails silently the moment an artist renames a node in Blender.
-
-TODO(pasha): is `AnnotationMaker` — 3D points projected to DOM overlays — yours? If so it
-deserves a paragraph of its own.

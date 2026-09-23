@@ -2,6 +2,21 @@
   "slug": "stairs-generator",
   "title": "Stairs Generator",
   "tagline": "Five sliders solve the geometry — the staircase is assembled at runtime.",
+  "track": "3d",
+  "facts": [
+    [
+      "Role",
+      "Sole developer — built from scratch, all 73 commits"
+    ],
+    [
+      "Scope",
+      "Procedural multi-flight geometry, AR, shareable URL state"
+    ],
+    [
+      "Outcome",
+      "Valid at every slider extreme; layout and state logic unit-tested"
+    ]
+  ],
   "tags": [
     "Three.js",
     "Procedural geometry",

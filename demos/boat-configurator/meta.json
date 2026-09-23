@@ -2,6 +2,21 @@
   "slug": "boat-configurator",
   "title": "Boat Configurator",
   "tagline": "Three.js inside a React + TypeScript app, shipped to production.",
+  "track": "3d",
+  "facts": [
+    [
+      "Role",
+      "Frontend developer — 271 of 776 commits"
+    ],
+    [
+      "Scope",
+      "React + TypeScript + Redux shell around a Three.js scene; cart and API layer"
+    ],
+    [
+      "Outcome",
+      "Cart rework removed the lag and unblocked the V2 launch"
+    ]
+  ],
   "tags": [
     "React",
     "TypeScript",
